@@ -588,3 +588,26 @@ input[type="checkbox"] {
     max-width: 90%;
     text-align: left;
 }
+
+.song-list {
+    margin: 20px 0;
+    padding: 20px;
+    background: #F8F9FA;
+    border-radius: 8px;
+}
+
+.song-item {
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #4059AD;
+}
+
+.song-item:hover {
+    background: #EFF2F1;
+    transform: translateX(5px);
+    color: #FF9F1C;
+}

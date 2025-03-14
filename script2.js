@@ -1,8 +1,14 @@
 // File handling and format toggle functionality
+let availableSongs = [];
+
 function initFileHandling() {
     const fileInput = document.getElementById('fileInput');
     const songDisplay = document.getElementById('songDisplay');
     const toggleFormat = document.getElementById('toggleFormat');
+    const searchInput = document.getElementById('searchInput');
+
+    // Load songs from directory
+    loadSongsFromDirectory();
 
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -16,154 +22,191 @@ function initFileHandling() {
         reader.readAsText(file);
     });
 
-    function parseMetadata(lines) {
-        const metadata = {
-            title: '',
-            author: '',
-            tag: '',
-            intro: '',
-            youtubeLink: '',
-            chords: ''
-        };
-
-        let contentStartIndex = 0;
-
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            
-            if (line.startsWith('title:')) {
-                metadata.title = line.substring(6).trim().replace(/-/g, ' ');
-            } else if (line.startsWith('author:')) {
-                metadata.author = line.substring(7).trim();
-            } else if (line.startsWith('tag:')) {
-                metadata.tag = line.substring(4).trim()
-                    .split(',')
-                    .map(tag => tag.trim().replace(/-/g, ' '))
-                    .join(', ');
-            } else if (line.startsWith('intro:')) {
-                metadata.intro = line.substring(6).trim();
-            } else if (line.startsWith('link:')) {
-                metadata.youtubeLink = line.substring(5).trim();
-            } else if (line.startsWith('chords:')) {
-                // After finding 'chords:', the next non-empty line is the start of content
-                for (let j = i + 1; j < lines.length; j++) {
-                    if (lines[j].trim() !== '') {
-                        contentStartIndex = j;
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-
-        return { metadata, contentStartIndex };
-    }
-
-    function displaySong(content) {
-        const lines = content.split('\n');
-        const { metadata, contentStartIndex } = parseMetadata(lines);
-
-        let songHtml = '';
+    // Search functionality
+    searchInput.addEventListener('input', function(e) {
+        const query = e.target.value.toLowerCase().trim();
+        const searchResults = document.getElementById('searchResults');
         
-        // Add metadata section
-        songHtml += `<div class="song-metadata">`;
-        if (metadata.title) {
-            songHtml += `<h2>${metadata.title}</h2>`;
-        }
-        if (metadata.author) {
-            songHtml += `<p class="author">Autor: ${metadata.author}</p>`;
-        }
-        if (metadata.tag) {
-            songHtml += `<p class="tags">Tagi: ${metadata.tag}</p>`;
-        }
-        if (metadata.intro) {
-            songHtml += `<p class="intro">Intro: <span class="chords" data-original="${metadata.intro}">${metadata.intro}</span></p>`;
-        }
-        if (metadata.youtubeLink) {
-            songHtml += `<p class="youtube-link"><a href="${metadata.youtubeLink}" target="_blank" rel="noopener noreferrer">Posłuchaj na YouTube</a></p>`;
-        }
-        songHtml += `</div>`;
-
-        // Process song content
-        for (let i = contentStartIndex; i < lines.length; i++) {
-            const line = lines[i];
-            if (line.trim()) {
-                songHtml += processLine(line);
-            }
+        if (query.length < 2) {
+            searchResults.innerHTML = '';
+            searchResults.classList.remove('active');
+            return;
         }
 
-        songDisplay.innerHTML = songHtml;
-        
-        // After displaying the song, update transposition if transposer is available
-        if (window.transposer) {
-            window.transposer.updateTransposition();
-        }
-    }
+        const filteredSongs = availableSongs.filter(song => 
+            song.toLowerCase().includes(query)
+        );
 
-    function processLine(line) {
-        if (!line.trim()) return '';
-
-        // Check if the line contains chords (has "//")
-        if (line.includes('//')) {
-            // Split the line at '//' to separate chords and lyrics
-            const [chordsSection, lyricsSection] = line.split('//').map(part => part.trim());
-            
-            // Create the HTML structure based on format
-            if (toggleFormat.checked) {
-                return `<div class="song-line vertical">
-                            <div class="chords" data-original="${chordsSection}">${chordsSection}</div>
-                            <div class="lyrics">${lyricsSection}</div>
-                        </div>`;
-            } else {
-                return `<div class="song-line horizontal">
-                            <div class="lyrics">${lyricsSection}</div>
-                            <div class="chords" data-original="${chordsSection}">${chordsSection}</div>
-                        </div>`;
-            }
+        if (filteredSongs.length > 0) {
+            searchResults.innerHTML = filteredSongs
+                .map(song => `<div class="search-result-item" onclick="loadSong('${song}')">${song}</div>`)
+                .join('');
+            searchResults.classList.add('active');
         } else {
-            // Lines without chords (no //)
-            return `<div class="song-line ${toggleFormat.checked ? 'vertical' : 'horizontal'}">
-                        <div class="lyrics">${line.trim()}</div>
-                    </div>`;
+            searchResults.innerHTML = '<div class="search-result-item">Nie znaleziono piosenek</div>';
+            searchResults.classList.add('active');
         }
-    }
+    });
 
-    // Handle format toggle
-    toggleFormat.addEventListener('change', function() {
-        const songLines = document.querySelectorAll('.song-line');
-        songLines.forEach(line => {
-            line.className = 'song-line ' + (this.checked ? 'vertical' : 'horizontal');
-        });
+    // Close search results when clicking outside
+    document.addEventListener('click', function(e) {
+        const searchResults = document.getElementById('searchResults');
+        if (!e.target.closest('.search-container')) {
+            searchResults.classList.remove('active');
+        }
     });
 }
 
-// Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', initFileHandling);
+async function loadSongsFromDirectory() {
+    try {
+        const response = await fetch('/songs');
+        const songs = await response.json();
+        availableSongs = songs;
+        
+        // Update song list if we're on the index page
+        const songList = document.getElementById('songList');
+        if (songList) {
+            songList.innerHTML = songs
+                .map(song => `<div class="song-item" onclick="loadSong('${song}')">${song.replace('.txt', '')}</div>`)
+                .join('');
+        }
+    } catch (error) {
+        console.error('Error loading songs:', error);
+    }
+}
 
-// Handle search input with debounce
-let searchTimeout;
-document.getElementById('searchInput').addEventListener('input', function(e) {
-    clearTimeout(searchTimeout);
-    const query = e.target.value.trim();
+async function loadSong(songName) {
+    try {
+        const response = await fetch(`/songs/${songName}`);
+        const content = await response.text();
+        displaySong(content);
+    } catch (error) {
+        console.error('Error loading song:', error);
+    }
+}
+
+function parseMetadata(lines) {
+    const metadata = {
+        title: '',
+        author: '',
+        tag: '',
+        intro: '',
+        youtubeLink: '',
+        chords: ''
+    };
+
+    let contentStartIndex = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        
+        if (line.startsWith('title:')) {
+            metadata.title = line.substring(6).trim().replace(/-/g, ' ');
+        } else if (line.startsWith('author:')) {
+            metadata.author = line.substring(7).trim();
+        } else if (line.startsWith('tag:')) {
+            metadata.tag = line.substring(4).trim()
+                .split(',')
+                .map(tag => tag.trim().replace(/-/g, ' '))
+                .join(', ');
+        } else if (line.startsWith('intro:')) {
+            metadata.intro = line.substring(6).trim();
+        } else if (line.startsWith('link:')) {
+            metadata.youtubeLink = line.substring(5).trim();
+        } else if (line.startsWith('chords:')) {
+            contentStartIndex = i + 1;
+            break;
+        }
+    }
+
+    return { metadata, contentStartIndex };
+}
+
+function displaySong(content) {
+    const songDisplay = document.getElementById('songDisplay');
+    const lines = content.split('\n');
+    const { metadata, contentStartIndex } = parseMetadata(lines);
+
+    let songHtml = '';
     
-    if (query.length >= 2) {
-        searchTimeout = setTimeout(() => {
-            const results = searchSongs(query);
-            displaySearchResults(results);
-        }, 300);
+    // Add metadata section
+    songHtml += `<div class="song-metadata">`;
+    if (metadata.title) {
+        songHtml += `<h2>${metadata.title}</h2>`;
+    }
+    if (metadata.author) {
+        songHtml += `<p class="author">Autor: ${metadata.author}</p>`;
+    }
+    if (metadata.tag) {
+        songHtml += `<p class="tags">Tagi: ${metadata.tag}</p>`;
+    }
+    if (metadata.intro) {
+        songHtml += `<p class="intro">Intro: <span class="chords" data-original="${metadata.intro}">${metadata.intro}</span></p>`;
+    }
+    if (metadata.youtubeLink) {
+        songHtml += `<p class="youtube-link"><a href="${metadata.youtubeLink}" target="_blank" rel="noopener noreferrer">Posłuchaj na YouTube</a></p>`;
+    }
+    songHtml += `</div>`;
+
+    // Process song content
+    for (let i = contentStartIndex; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line) {
+            songHtml += processLine(line);
+        }
+    }
+
+    songDisplay.innerHTML = songHtml;
+    
+    // After displaying the song, update transposition if transposer is available
+    if (window.transposer) {
+        window.transposer.updateTransposition();
+    }
+}
+
+function processLine(line) {
+    const toggleFormat = document.getElementById('toggleFormat');
+    if (!line.trim()) return '';
+
+    // Check if the line contains chords (has "//")
+    if (line.includes('//')) {
+        // Split the line at '//' to separate chords and lyrics
+        const [chordsSection, lyricsSection] = line.split('//').map(part => part.trim());
+        
+        // Create the HTML structure based on format
+        if (toggleFormat.checked) {
+            return `<div class="song-line vertical">
+                        <div class="chords" data-original="${chordsSection}">${chordsSection}</div>
+                        <div class="lyrics">${lyricsSection || '&nbsp;'}</div>
+                    </div>`;
+        } else {
+            return `<div class="song-line horizontal">
+                        <div class="lyrics">${lyricsSection || '&nbsp;'}</div>
+                        <div class="chords" data-original="${chordsSection}">${chordsSection}</div>
+                    </div>`;
+        }
     } else {
-        document.getElementById('searchResults').classList.remove('active');
+        // Lines without chords (no //)
+        return `<div class="song-line ${toggleFormat.checked ? 'vertical' : 'horizontal'}">
+                    <div class="lyrics">${line.trim()}</div>
+                </div>`;
     }
-});
+}
 
-// Close search results when clicking outside
-document.addEventListener('click', function(e) {
-    const searchContainer = document.querySelector('.search-container');
-    const searchResults = document.getElementById('searchResults');
-    
-    if (!searchContainer.contains(e.target)) {
-        searchResults.classList.remove('active');
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleFormat = document.getElementById('toggleFormat');
+    if (toggleFormat) {
+        toggleFormat.addEventListener('change', function() {
+            const songLines = document.querySelectorAll('.song-line');
+            songLines.forEach(line => {
+                line.className = 'song-line ' + (this.checked ? 'vertical' : 'horizontal');
+            });
+        });
     }
+    
+    // Initialize file handling
+    initFileHandling();
 });
 
 // Handle file input for adding new songs
@@ -217,9 +260,6 @@ const chordMap = {
     'F#': 6, 'Gb': 6, 'G': 7, 'G#': 8, 'Ab': 8, 'A': 9, 'A#': 10, 'Bb': 10,
     'B': 11
 };
-
-// List of available songs - will be populated from the songs folder
-let availableSongs = [];
 
 // Function to clean up text by replacing hyphens with spaces
 function cleanText(text) {

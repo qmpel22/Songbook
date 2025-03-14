@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Śpiewnik</title>
+    <title><%= song.title %> - Tekst i Akordy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-lyrics.css">
-
+    <script src="script5.js"></script>
 </head>
 <body>
     <div class="header-container">
-        <h1>Śpiewnik</h1>
+        <h1>Śpiewnik Online</h1>
         <nav class="nav-menu">
             <a href="index.html">Strona Główna</a>
             <a href="Lyrics.html" class="active">Piosenki</a>
@@ -45,6 +45,15 @@
             <button class="transpose-btn" data-value="5">+5</button>
         </div>
     </div>
+
+    <h1 id="song-title"></h1>
+    <p id="song-author"></p>
+    <a id="song-link" href="#" target="_blank">Watch on YouTube</a>
+    <h3>Chords</h3>
+    <pre id="song-chords"></pre>
+    <h3>Lyrics</h3>
+    <pre id="song-lyrics"></pre>
+
     <script src="script2.js"></script>
     <script src="script.js"></script>
 </body>
