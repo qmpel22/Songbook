@@ -1,0 +1,107 @@
+.song-line {
+    display: block;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.song-line:hover {
+    background-color: #EFF2F1;
+    transform: translateX(5px);
+}
+
+.lyrics {
+    font-size: 1.2em;
+    color: #4059AD;
+    width: 100%;
+    line-height: 1.8;
+}
+
+.chords {
+    font-weight: bold;
+    color: #FF9F1C;
+    font-size: 1.2em;
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    white-space: pre;
+    line-height: 1;
+}
+
+/* Default layout - chords on the right */
+.song-line.horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 8px;
+}
+
+.song-line.horizontal .chords {
+    width: 35%;
+    text-align: right;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.song-line.horizontal .lyrics {
+    width: 60%;
+    line-height: 1.4;
+}
+
+/* When checkbox is checked - chords above lyrics */
+.song-line.vertical {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.song-line.vertical .chords {
+    display: block;
+    text-align: left;
+    margin-bottom: 0;
+    width: 100%;
+    color: #FF9F1C;
+    padding-bottom: 0;
+    line-height: 1;
+}
+
+.song-line.vertical .lyrics {
+    display: block;
+    width: 100%;
+    color: #4059AD;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.lyrics .chord {
+    color: #FF9F1C;
+    font-weight: bold;
+    font-size: 0.9em;
+    vertical-align: super;
+    margin-right: 3px;
+    line-height: 0;
+}
+
+.song-metadata .youtube-link {
+    margin: 15px 0;
+}
+
+.song-metadata .youtube-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FF0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.song-metadata .youtube-link a:hover {
+    background-color: #CC0000;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+} 

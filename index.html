@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Śpiewnik - Strona Główna</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header-container">
+        <h1>Śpiewnik Online</h1>
+        <nav class="nav-menu">
+            <a href="index.html" class="active">Strona Główna</a>
+            <a href="Lyrics.html">Piosenki</a>
+            <a href="transponuj.html">Transponowanie</a>
+        </nav>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Wyszukaj piosenkę..." autocomplete="off">
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="song-container">
+        <div class="song-metadata">
+            <h2>Witaj w Śpiewniku Online!</h2>
+            <p>Twoja kolekcja piosenek z akordami w jednym miejscu</p>
+        </div>
+
+        <div class="transpose-container">
+            <label>Funkcje:</label>
+            <div class="transpose-buttons">
+                <button class="transpose-btn" onclick="window.location.href='Lyrics.html'">
+                    <span>📝</span>
+                </button>
+                <button class="transpose-btn" onclick="window.location.href='transponuj.html'">
+                    <span>🎵</span>
+                </button>
+                <button class="transpose-btn" onclick="window.location.href='#'">
+                    <span>📁</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="song-metadata">
+            <p class="intro">
+                • Wyszukuj piosenki po tytule lub wykonawcy<br>
+                • Transpozycja akordów do wybranej tonacji<br>
+                • Możliwość wyświetlania akordów nad lub obok tekstu<br>
+                • Dodawaj własne piosenki do kolekcji
+            </p>
+        </div>
+    </div>
+
+    <script src="script2.js"></script>
+</body>
+</html>

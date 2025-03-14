@@ -1,0 +1,590 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #EFF2F1;
+    text-align: center;
+    color: #4059AD;
+    line-height: 1.6;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #4059AD;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+}
+
+.header-container h1 {
+    margin: 0;
+    padding: 0;
+    color: #EFF2F1;
+    box-shadow: none;
+    font-size: 2em;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-menu a:hover {
+    background-color: #97D8C4;
+}
+
+.nav-menu a.active {
+    background-color: #97D8C4;
+}
+
+input[type="file"] {
+    margin: 20px;
+    padding: 12px;
+    border: 2px solid #97D8C4;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1em;
+}
+
+input[type="file"]:hover {
+    border-color: #FF9F1C;
+    box-shadow: 0 0 8px rgba(255, 159, 28, 0.3);
+}
+
+label {
+    display: inline-block;
+    margin: 20px;
+    font-size: 1.1em;
+    color: #4059AD;
+    cursor: pointer;
+    user-select: none;
+}
+
+input[type="checkbox"] {
+    accent-color: #97D8C4;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.song-container {
+    max-width: 800px;
+    background: white;
+    margin: 20px auto;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+    text-align: left;
+}
+
+.song-line {
+    display: block;
+    margin-bottom: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.song-line:hover {
+    background-color: #EFF2F1;
+    transform: translateX(5px);
+}
+
+.lyrics {
+    font-size: 1.2em;
+    color: #4059AD;
+    width: 100%;
+    line-height: 1.8;
+}
+
+.chords {
+    font-weight: bold;
+    color: #FF9F1C;
+    font-size: 1.2em;
+    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    white-space: pre;
+    line-height: 1;
+}
+
+/* Default layout - chords on the right */
+.song-line.horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+    margin-bottom: 8px;
+}
+
+.song-line.horizontal .chords {
+    width: 35%;
+    text-align: right;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    line-height: 1;
+}
+
+.song-line.horizontal .lyrics {
+    width: 60%;
+    line-height: 1.4;
+}
+
+/* When checkbox is checked - chords above lyrics */
+.song-line.vertical {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.song-line.vertical .chords {
+    display: block;
+    text-align: left;
+    margin-bottom: 0;
+    width: 100%;
+    color: #FF9F1C;
+    padding-bottom: 0;
+    line-height: 1;
+}
+
+.song-line.vertical .lyrics {
+    display: block;
+    width: 100%;
+    color: #4059AD;
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+.transpose-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+}
+
+.transpose-container label {
+    margin-bottom: 15px;
+    color: #4059AD;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.transpose-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    background: #F8F9FA;
+    border-radius: 12px;
+    width: 100%;
+    flex-wrap: nowrap;
+}
+
+.transpose-btn {
+    padding: 10px 15px;
+    border: 2px solid #97D8C4;
+    background: white;
+    color: #4059AD;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+    min-width: 45px;
+    flex: 1;
+    max-width: 55px;
+    font-weight: bold;
+}
+
+.transpose-btn:hover {
+    background: #EFF2F1;
+    border-color: #FF9F1C;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(255, 159, 28, 0.2);
+}
+
+.transpose-btn.active {
+    background: #FF9F1C;
+    color: white;
+    border-color: #FF9F1C;
+    box-shadow: 0 2px 5px rgba(255, 159, 28, 0.3);
+}
+
+.song-metadata {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 25px;
+    border-bottom: 2px solid #97D8C4;
+}
+
+.song-metadata h2 {
+    color: #4059AD;
+    margin: 0 0 15px 0;
+    font-size: 2em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.song-metadata p {
+    margin: 8px 0;
+    color: #6B9AC4;
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+.song-metadata .author {
+    font-style: italic;
+    color: #4059AD;
+}
+
+.song-metadata .tags {
+    color: #FF9F1C;
+    font-weight: bold;
+}
+
+.song-metadata .intro {
+    font-family: monospace;
+    color: #4059AD;
+    background: #F8F9FA;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px auto;
+    max-width: 90%;
+}
+
+.lyrics .chord {
+    color: #FF9F1C;
+    font-weight: bold;
+    font-size: 0.9em;
+    vertical-align: super;
+    margin-right: 3px;
+    line-height: 0;
+}
+
+.song-metadata .youtube-link {
+    margin: 15px 0;
+}
+
+.song-metadata .youtube-link a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FF0000;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.song-metadata .youtube-link a:hover {
+    background-color: #CC0000;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        padding: 15px;
+    }
+
+    input[type="file"] {
+        width: 90%;
+        max-width: 300px;
+        margin: 15px auto;
+        padding: 10px;
+    }
+
+    label {
+        display: block;
+        margin: 15px auto;
+        text-align: center;
+    }
+
+    .song-container {
+        padding: 20px;
+        margin: 10px;
+        width: auto;
+        max-width: 100%;
+    }
+
+    .song-line {
+        margin-bottom: 15px;
+        padding: 8px;
+    }
+
+    .lyrics {
+        font-size: 1.1em;
+        line-height: 1.6;
+    }
+
+    .chords {
+        font-size: 1.1em;
+        line-height: 1.3;
+    }
+
+    .song-line.horizontal {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .song-line.horizontal .chords {
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .song-line.horizontal .lyrics {
+        width: 100%;
+    }
+
+    .transpose-container {
+        margin: 15px auto;
+        padding: 15px;
+    }
+
+    .transpose-container label {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+
+    .transpose-buttons {
+        gap: 4px;
+        padding: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .transpose-btn {
+        min-width: 40px;
+        max-width: 45px;
+        padding: 8px 10px;
+        font-size: 1em;
+    }
+
+    .song-metadata {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+    }
+
+    .song-metadata h2 {
+        font-size: 1.6em;
+        margin-bottom: 10px;
+    }
+
+    .song-metadata p {
+        font-size: 1.1em;
+        margin: 6px 0;
+    }
+
+    .song-metadata .intro {
+        font-size: 0.9em;
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .song-metadata .youtube-link {
+        margin: 12px 0;
+    }
+
+    .song-metadata .youtube-link a {
+        padding: 8px 16px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+        padding: 12px;
+    }
+
+    .song-container {
+        padding: 15px;
+        margin: 5px;
+    }
+
+    .song-line {
+        margin-bottom: 12px;
+        padding: 6px;
+    }
+
+    .lyrics {
+        font-size: 1em;
+    }
+
+    .chords {
+        font-size: 1em;
+    }
+
+    .transpose-container {
+        padding: 10px;
+        margin: 10px auto;
+    }
+
+    .transpose-buttons {
+        gap: 3px;
+        padding: 8px;
+    }
+
+    .transpose-btn {
+        min-width: 35px;
+        max-width: 40px;
+        padding: 6px 8px;
+    }
+
+    .song-metadata h2 {
+        font-size: 1.4em;
+    }
+
+    .song-metadata p {
+        font-size: 1em;
+    }
+
+    .song-metadata .intro {
+        font-size: 0.85em;
+        padding: 8px;
+    }
+
+    .song-metadata .youtube-link {
+        margin: 10px 0;
+    }
+
+    .song-metadata .youtube-link a {
+        padding: 6px 12px;
+        font-size: 0.9em;
+    }
+}
+
+/* Add touch-friendly styles */
+@media (hover: none) {
+    .song-line:hover {
+        transform: none;
+    }
+
+    .transpose-btn:hover {
+        transform: none;
+    }
+
+    .transpose-btn:active {
+        background: #FF9F1C;
+        color: white;
+        border-color: #FF9F1C;
+    }
+}
+
+/* Add landscape orientation support */
+@media (max-height: 500px) and (orientation: landscape) {
+    .song-container {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    .song-line {
+        margin-bottom: 10px;
+        padding: 6px;
+    }
+
+    .transpose-buttons {
+        padding: 8px;
+    }
+
+    .transpose-btn {
+        padding: 6px 8px;
+    }
+}
+
+/* Add high-DPI screen support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+.search-container {
+    position: relative;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #97D8C4;
+    border-radius: 8px;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    outline: none;
+    border-color: #FF9F1C;
+    box-shadow: 0 0 8px rgba(255, 159, 28, 0.3);
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 20px;
+    right: 20px;
+    background: white;
+    border: 1px solid #97D8C4;
+    border-radius: 8px;
+    margin-top: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+}
+
+.search-results.active {
+    display: block;
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #EFF2F1;
+    color: #FF9F1C;
+}
+
+.intro {
+    background: #F8F9FA;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px auto;
+    max-width: 90%;
+    text-align: left;
+}
