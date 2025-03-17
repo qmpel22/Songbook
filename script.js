@@ -40,10 +40,6 @@ function denormalizeChord(chord, preferFlats = false) {
 }
 
 function transposeChord(chord, steps) {
-    const chordMap = {
-        'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
-    };
-
     const notes = Object.keys(chordMap);
     const index = chordMap[chord];
     if (index === undefined) return chord; // Return unchanged if not a valid chord
@@ -53,8 +49,11 @@ function transposeChord(chord, steps) {
 }
 
 function transposeTextChords(text, semitones) {
-    const chordPattern = /[A-G][#b]?/g; // Regex to match chords
-    return text.replace(chordPattern, match => transposeChord(match, semitones));
+    const chordPattern = /([A-G][#b]?)(\s*\/\/.*)/g; // Regex to match chords followed by lyrics
+    return text.replace(chordPattern, (match, chord, lyrics) => {
+        const transposedChord = transposeChord(chord, semitones);
+        return `${transposedChord} ${lyrics}`; // Return transposed chord with original lyrics
+    });
 }
 
 function transposeText(text, steps, preferFlats = false) {
@@ -65,54 +64,23 @@ function transposeText(text, steps, preferFlats = false) {
 
 // Event Listener for Transpose Buttons
 document.addEventListener('DOMContentLoaded', () => {
-    const notesInput = document.getElementById('notesInput');
-    const transposedOutput = document.getElementById('transposedOutput');
     const transposeButtons = document.querySelectorAll('.transpose-btn');
 
-    // Function to handle the transpose button click
-    function handleTransposeClick(event) {
-        const semitones = parseInt(event.target.getAttribute('data-value'));
-        
-        // Remove active class from all buttons
-        transposeButtons.forEach(button => {
-            button.classList.remove('active');
-        });
-
-        // Add active class to the clicked button
-        event.target.classList.add('active');
-
-        // Transpose the input text
-        const inputText = notesInput.value.trim();
-        if (inputText) {
-            const transposedText = transposeText(inputText, semitones);
-            transposedOutput.textContent = transposedText;  // Display the transposed notes
-        }
-
-        // Ensure transposition works for lyrics displayed in songDisplay
-        const songLyrics = document.getElementById('song-lyrics');
-        if (songLyrics) {
-            const lyrics = songLyrics.textContent;
-            const transposedLyrics = transposeTextChords(lyrics, semitones);
-            songLyrics.textContent = transposedLyrics;
-        }
-    }
-
-    // Attach the event listener to each transpose button
     transposeButtons.forEach(button => {
-        button.addEventListener('click', handleTransposeClick);
-    });
+        button.addEventListener('click', (event) => {
+            const semitones = parseInt(event.target.getAttribute('data-value'));
+            const songLyrics = document.getElementById('song-lyrics');
+            if (songLyrics) {
+                const lyrics = songLyrics.textContent;
+                const transposedLyrics = transposeTextChords(lyrics, semitones);
+                songLyrics.textContent = transposedLyrics; // Update displayed lyrics
+            }
 
-    // Initialize the default transposition (if needed)
-    const defaultButton = document.querySelector('.transpose-btn.active');
-    if (defaultButton) {
-        const defaultSemitones = parseInt(defaultButton.getAttribute('data-value'));
-        const songLyrics = document.getElementById('song-lyrics');
-        if (songLyrics) {
-            const lyrics = songLyrics.textContent;
-            const transposedLyrics = transposeTextChords(lyrics, defaultSemitones);
-            songLyrics.textContent = transposedLyrics;
-        }
-    }
+            // Highlight the active button
+            transposeButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        });
+    });
 });
 
 // Example usage

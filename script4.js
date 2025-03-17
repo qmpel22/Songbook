@@ -1,3 +1,5 @@
+// This file should focus on displaying the song and not handle transposition
+
 // Obsługa wczytywania plików
 document.addEventListener('DOMContentLoaded', () => {
     const songList = document.getElementById('song-list');
@@ -105,36 +107,29 @@ function parseMetadata(content) {
 // Sprawdzenie czy jesteśmy na stronie z tekstem piosenki
 if (window.location.pathname.includes('Lyrics.html')) {
     const savedSong = localStorage.getItem('currentSong');
-    if (savedSong) {
-        const songDisplay = document.getElementById('songDisplay');
-        if (songDisplay) {
-            const metadata = parseMetadata(savedSong);
-            let html = `
-                <div class="song-metadata">
-                    <h2>${metadata.title}</h2>
-                    ${metadata.author ? `<p class="author">Autor: ${metadata.author}</p>` : ''}
-                    ${metadata.tag ? `<p class="tags">Tagi: ${metadata.tag}</p>` : ''}
-                    ${metadata.intro ? `<p class="intro">Intro: <span class="chords" data-original="${metadata.intro}">${metadata.intro}</span></p>` : ''}
-                    ${metadata.link ? `<p class="youtube-link"><a href="${metadata.link}" target="_blank">Posłuchaj na YouTube</a></p>` : ''}
-                </div>
-            `;
+    const songDisplay = document.getElementById('songDisplay');
+    if (savedSong && songDisplay) {
+        const metadata = parseMetadata(savedSong);
+        let html = `
+            <div class="song-metadata">
+                <h2>${metadata.title}</h2>
+                ${metadata.author ? `<p class="author">Autor: ${metadata.author}</p>` : ''}
+                ${metadata.tag ? `<p class="tags">Tagi: ${metadata.tag}</p>` : ''}
+                ${metadata.intro ? `<p class="intro">Intro: <span class="chords" data-original="${metadata.intro}">${metadata.intro}</span></p>` : ''}
+                ${metadata.link ? `<p class="youtube-link"><a href="${metadata.link}" target="_blank">Posłuchaj na YouTube</a></p>` : ''}
+            </div>
+        `;
 
-            // Dodaj treść piosenki
-            const contentStartIndex = savedSong.indexOf('chords:') + 7;
-            const songContent = savedSong.substring(contentStartIndex)
-                .split('\n')
-                .filter(line => line.trim())
-                .map(line => processLine(line))
-                .join('');
+        // Dodaj treść piosenki
+        const contentStartIndex = savedSong.indexOf('chords:') + 7;
+        const songContent = savedSong.substring(contentStartIndex)
+            .split('\n')
+            .filter(line => line.trim())
+            .map(line => processLine(line))
+            .join('');
 
-            html += songContent;
-            songDisplay.innerHTML = html;
-
-            // Aktualizuj transpozycję jeśli dostępna
-            if (window.transposer) {
-                window.transposer.updateTransposition();
-            }
-        }
+        html += songContent;
+        songDisplay.innerHTML = html;
     }
 }
 
