@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= song.title %> - Tekst i Akordy</title>
+    <title>Śpiewnik Online - Tekst i Akordy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-lyrics.css">
-    <script src="script5.js"></script>
+    <script src="script5.js" defer></script> <!-- Ensure this is the transposition logic script -->
+    <script src="script.js" defer></script>
+    <script src="script2.js" defer></script> <!-- Ensure this is loaded after script.js -->
 </head>
 <body>
     <div class="header-container">
@@ -22,12 +24,17 @@
         <input type="text" id="searchInput" placeholder="Szukaj piosenki...">
         <div id="searchResults" class="search-results"></div>
     </div>
+    
     <input type="file" id="fileInput" accept=".txt">
-    <label>
+    <label for="toggleFormat">
         <input type="checkbox" id="toggleFormat">
         Zmień format wyświetlania
     </label>
+
     <div id="songDisplay" class="song-container"></div>
+    <div id="song-lyrics" class="song-lyrics"></div>
+
+    <!-- Transpose Section -->
     <div class="transpose-container">
         <label>Transponuj akordy:</label>
         <div class="transpose-buttons">
@@ -46,15 +53,6 @@
         </div>
     </div>
 
-    <h1 id="song-title"></h1>
-    <p id="song-author"></p>
-    <a id="song-link" href="#" target="_blank">Watch on YouTube</a>
-    <h3>Chords</h3>
-    <pre id="song-chords"></pre>
-    <h3>Lyrics</h3>
-    <pre id="song-lyrics"></pre>
-
-    <script src="script2.js"></script>
-    <script src="script.js"></script>
+    <div id="transposition-info" class="transposition-info"></div>
 </body>
 </html>

@@ -207,190 +207,26 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize file handling
     initFileHandling();
-});
 
-// Handle file input for adding new songs
-document.getElementById('fileInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            const text = e.target.result;
-            const filename = file.name;
-            const songName = filename.replace('.txt', '');
+    // Update the event listener for transpose buttons
+    document.querySelectorAll('.transpose-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const semitones = parseInt(button.getAttribute('data-value'));
+            const lyrics = songDisplay.innerHTML; // Use the correct element
+            const transposedLyrics = transposeTextChords(lyrics, semitones);
             
-            // Add the new song to availableSongs if it's not already there
-            if (!availableSongs.includes(songName)) {
-                availableSongs.push(songName);
-            }
+            // Update the displayed lyrics
+            songDisplay.innerHTML = transposedLyrics; 
             
-            await loadAndDisplaySong(text);
-        };
-        reader.onerror = function(error) {
-            console.error('Error reading file:', error);
-            alert('Nie udało się odczytać pliku. Sprawdź czy plik jest poprawny.');
-        };
-        reader.readAsText(file);
-    }
-});
+            // Highlight the active button
+            document.querySelectorAll('.transpose-btn').forEach(btn => {
+                btn.classList.remove('active'); // Remove active class from all buttons
+            });
+            button.classList.add('active'); // Add active class to the clicked button
 
-// Add event listener to the checkbox to update the format
-document.getElementById('toggleFormat').addEventListener('change', function() {
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput.files.length > 0) {
-        fileInput.dispatchEvent(new Event('change'));
-    }
-});
-
-// Handle transpose button clicks
-document.querySelectorAll('.transpose-btn').forEach(button => {
-    button.addEventListener('click', function() {
-        document.querySelectorAll('.transpose-btn').forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        const fileInput = document.getElementById('fileInput');
-        if (fileInput.files.length > 0) {
-            fileInput.dispatchEvent(new Event('change'));
-        }
+            // Display the transposition amount
+            const transpositionInfo = document.getElementById('transposition-info');
+            transpositionInfo.textContent = `Transposed by ${semitones} semitone(s)`;
+        });
     });
 });
-
-// Map chords to semitone values
-const chordMap = {
-    'C': 0, 'C#': 1, 'Db': 1, 'D': 2, 'D#': 3, 'Eb': 3, 'E': 4, 'F': 5,
-    'F#': 6, 'Gb': 6, 'G': 7, 'G#': 8, 'Ab': 8, 'A': 9, 'A#': 10, 'Bb': 10,
-    'B': 11
-};
-
-// Function to clean up text by replacing hyphens with spaces
-function cleanText(text) {
-    if (!text) return '';
-    return text.replace(/-/g, ' ');
-}
-
-// Function to load and display song content
-async function loadAndDisplaySong(text) {
-    try {
-        const lines = text.split('\n');
-        const { metadata, contentStartIndex } = parseMetadata(lines);
-        
-        const toggleFormat = document.getElementById('toggleFormat').checked;
-        const activeButton = document.querySelector('.transpose-btn.active');
-        const transpositionValue = activeButton ? parseInt(activeButton.dataset.value) : 0;
-
-        let songHtml = '';
-        
-        // Add metadata section
-        songHtml += `<div class="song-metadata">`;
-        if (metadata.title) {
-            songHtml += `<h2>${metadata.title}</h2>`;
-        }
-        if (metadata.author) {
-            songHtml += `<p class="author">Autor: ${metadata.author}</p>`;
-        }
-        if (metadata.tag) {
-            songHtml += `<p class="tags">Tagi: ${metadata.tag}</p>`;
-        }
-        if (metadata.intro) {
-            const transposedIntro = transposeTextChords(metadata.intro, transpositionValue);
-            songHtml += `<p class="intro">Intro: ${transposedIntro}</p>`;
-        }
-        if (metadata.youtubeLink) {
-            songHtml += `<p class="youtube-link"><a href="${metadata.youtubeLink}" target="_blank" rel="noopener noreferrer">Posłuchaj na YouTube</a></p>`;
-        }
-        songHtml += `</div>`;
-
-        // Process song content
-        for (let i = contentStartIndex; i < lines.length; i++) {
-            const line = lines[i];
-            if (line.trim()) {
-                songHtml += processLine(line, transpositionValue, toggleFormat);
-            }
-        }
-
-        document.getElementById('songDisplay').innerHTML = songHtml;
-        return true;
-    } catch (error) {
-        console.error('Error processing song:', error);
-        return false;
-    }
-}
-
-// Transposition functionality
-const sharpNotes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const flatNotes = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
-
-// Map of equivalent notes (flats to sharps)
-const flatToSharp = {
-    'Db': 'C#',
-    'Eb': 'D#',
-    'Gb': 'F#',
-    'Ab': 'G#',
-    'Bb': 'A#'
-};
-
-function normalizeChord(chord) {
-    // Convert flat notation to sharp notation for internal processing
-    for (const [flat, sharp] of Object.entries(flatToSharp)) {
-        if (chord.startsWith(flat)) {
-            return chord.replace(flat, sharp);
-        }
-    }
-    return chord;
-}
-
-function denormalizeChord(chord, preferFlats = false) {
-    if (!preferFlats) return chord;
-    
-    // Convert sharp notation back to flat notation if preferred
-    for (const [flat, sharp] of Object.entries(flatToSharp)) {
-        if (chord.startsWith(sharp)) {
-            return chord.replace(sharp, flat);
-        }
-    }
-    return chord;
-}
-
-function transposeChord(chord, steps, preferFlats = false) {
-    // Extract the root note and the rest of the chord
-    const chordPattern = /^([A-G][b#]?)(.*)$/;
-    const match = chord.match(chordPattern);
-    if (!match) return chord; // Return unchanged if not a valid chord
-
-    const [, root, suffix] = match;
-    const normalizedRoot = normalizeChord(root);
-    
-    // Find the base note index
-    let noteIndex = sharpNotes.indexOf(normalizedRoot);
-    if (noteIndex === -1) return chord; // Return unchanged if not found
-
-    // Calculate new index
-    let newIndex = (noteIndex + steps) % 12;
-    if (newIndex < 0) newIndex += 12;
-
-    // Get the new root note
-    const newRoot = preferFlats ? flatNotes[newIndex] : sharpNotes[newIndex];
-    
-    // Return the transposed chord with the original suffix
-    return newRoot + suffix;
-}
-
-function transposeText(text, steps, preferFlats = false) {
-    // Updated regex to match more chord patterns
-    const chordPattern = /[A-G][b#]?(?:m|maj|dim|aug|sus[24]|[2-9]|add\d+|\/[A-G][b#]?)*\b/g;
-    return text.replace(chordPattern, match => transposeChord(match, steps, preferFlats));
-}
-
-// Function to transpose all chords in a text
-function transposeTextChords(text, semitones) {
-    if (!text) return '';
-    // Split the text into words and process each one
-    return text.split(/(\s+)/).map(part => {
-        if (part.trim() === '') return part;
-        // Check if the part is a valid chord
-        const upperPart = part.toUpperCase();
-        if (chordMap[upperPart] !== undefined) {
-            return transposeChord(part, semitones);
-        }
-        return part;
-    }).join('');
-}

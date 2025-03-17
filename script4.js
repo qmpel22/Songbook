@@ -1,15 +1,17 @@
 // Obsługa wczytywania plików
 document.addEventListener('DOMContentLoaded', () => {
-    // Stała zawierająca dane piosenek
-    const SONGS_DATA = [
+    const songList = document.getElementById('song-list');
+
+    // Zdefiniowana lista piosenek
+    const songs = [
         {
-            filename: 'Panie-ulituj-sie-nad-nami.txt',
-            content: `title: Panie-ulituj-sie-nad-nami
-author:
-tag: O-Bogu,Chwalebna
-intro: C e F A
-link:https://www.youtube.com/watch?v=YZuFsI-bttM
-chords:
+            title: "Panie ulituj sie nad nami",
+            content: `title: Panie ulituj sie nad nami
+author: 
+tag: O-Bogu, Chwalebna
+intro: CeFA
+link: https://www.youtube.com/watch?v=YZuFsI-bttM
+chords: 
 C                      e//
 Panie ulituj sie nad nami
       F              a//
@@ -20,20 +22,11 @@ F               G//
 uzdrow nasze serca`
         },
         {
-            filename: 'tekst2.txt',
-            content: `title: Przyjacielu
-author: Nieznany
-tag: przyjaźń
-intro: D G A
-chords:
-D                G//
-Przyjacielu chce zostac z toba 
-A                D//
+            title: "Przyjacielu",
+            content: `Przyjacielu chce zostac z toba 
 Przy tobie chce byc 
-G                D//
 I nie trzeba 
-A                D//
-bys mowil cos Wystarczy zebys byl
+bys mowil cos Wystarczy zebys byl/x2
 
 Bo nie ma wiekszej milosci niz ta, 
 gdy ktos zycie oddaje bym ja mogl zyc...
@@ -41,87 +34,43 @@ gdy ktos zycie oddaje bym ja mogl zyc...
 chce byc z toba
 gdy jest mi dobrze i kiedy mi zle 
 przyjacielu
-przed toba otwieram serce`
+przed toba otwieram serce/x2`
         }
     ];
 
     // Funkcja do wczytywania listy piosenek
     function loadSongsList() {
-        try {
-            const songList = document.getElementById('song-list');
-            if (!songList) return;
+        // Wyczyść istniejącą listę
+        songList.innerHTML = '';
 
-            // Wyczyść istniejącą listę
-            songList.innerHTML = '';
+        // Dodaj każdą piosenkę do listy
+        songs.forEach(song => {
+            const songDiv = document.createElement('div');
+            songDiv.className = 'song-item';
+            songDiv.textContent = song.title;
 
-            // Dodaj każdą piosenkę do listy
-            SONGS_DATA.forEach(song => {
-                const songDiv = createSongElement(song.content, song.filename);
-                songList.appendChild(songDiv);
+            songDiv.addEventListener('click', () => {
+                // Zapisz zawartość piosenki do localStorage
+                localStorage.setItem('currentSong', song.content);
+                // Otwórz nową stronę z tekstem piosenki
+                window.open('Lyrics.html', '_blank');
             });
 
-            // Dodaj obsługę wyszukiwania
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    const query = e.target.value.toLowerCase().trim();
-                    const songItems = songList.querySelectorAll('.song-item');
-                    
-                    songItems.forEach(item => {
-                        const title = item.textContent.toLowerCase();
-                        item.style.display = title.includes(query) ? 'block' : 'none';
-                    });
-                });
-            }
-        } catch (error) {
-            console.error('Error loading songs list:', error);
-            const songList = document.getElementById('song-list');
-            if (songList) {
-                songList.innerHTML = '<div class="error-message">Nie udało się załadować listy piosenek.</div>';
-            }
-        }
-    }
-
-    // Funkcja do tworzenia elementu piosenki
-    function createSongElement(content, filename) {
-        const songDiv = document.createElement('div');
-        songDiv.className = 'song-item';
-        
-        // Parsuj metadane
-        const lines = content.split('\n');
-        let title = filename.replace('.txt', '').replace(/-/g, ' ');
-        
-        // Szukaj tytułu w zawartości pliku
-        for (const line of lines) {
-            if (line.startsWith('title:')) {
-                title = line.substring(6).trim().replace(/-/g, ' ');
-                break;
-            }
-        }
-        
-        songDiv.textContent = title;
-        
-        songDiv.addEventListener('click', () => {
-            localStorage.setItem('currentSong', content);
-            window.open('Lyrics.html', '_blank');
-        });
-        
-        return songDiv;
-    }
-
-    // Funkcja do zapisywania piosenki w localStorage
-    function saveSongToLocalStorage(filename, content) {
-        const songs = JSON.parse(localStorage.getItem('savedSongs') || '{}');
-        songs[filename] = content;
-        localStorage.setItem('savedSongs', JSON.stringify(songs));
-    }
-
-    // Funkcja do wczytywania zapisanych piosenek
-    function loadSavedSongs(songList) {
-        const songs = JSON.parse(localStorage.getItem('savedSongs') || '{}');
-        for (const [filename, content] of Object.entries(songs)) {
-            const songDiv = createSongElement(content, filename);
             songList.appendChild(songDiv);
+        });
+
+        // Dodaj obsługę wyszukiwania
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const songItems = songList.querySelectorAll('.song-item');
+                
+                songItems.forEach(item => {
+                    const title = item.textContent.toLowerCase();
+                    item.style.display = title.includes(query) ? 'block' : 'none';
+                });
+            });
         }
     }
 
@@ -147,7 +96,7 @@ function parseMetadata(content) {
         else if (trimmedLine.startsWith('tag:')) metadata.tag = trimmedLine.substring(4).trim();
         else if (trimmedLine.startsWith('intro:')) metadata.intro = trimmedLine.substring(6).trim();
         else if (trimmedLine.startsWith('link:')) metadata.link = trimmedLine.substring(5).trim();
-        else if (trimmedLine.startsWith('chords:')) break;
+        else if (trimmedLine.startsWith('chords:')) break; // Stop parsing at chords
     }
 
     return metadata;
