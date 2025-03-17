@@ -1,5 +1,50 @@
 // Obsługa wczytywania plików
 document.addEventListener('DOMContentLoaded', () => {
+    // Stała zawierająca dane piosenek
+    const SONGS_DATA = [
+        {
+            filename: 'Panie-ulituj-sie-nad-nami.txt',
+            content: `title: Panie-ulituj-sie-nad-nami
+author:
+tag: O-Bogu,Chwalebna
+intro: C e F A
+link:https://www.youtube.com/watch?v=YZuFsI-bttM
+chords:
+C                      e//
+Panie ulituj sie nad nami
+      F              a//
+bo w tobie nasze ocalenie
+    F                   e//
+wyciagnij reke nad chorymi
+F               G//
+uzdrow nasze serca`
+        },
+        {
+            filename: 'tekst2.txt',
+            content: `title: Przyjacielu
+author: Nieznany
+tag: przyjaźń
+intro: D G A
+chords:
+D                G//
+Przyjacielu chce zostac z toba 
+A                D//
+Przy tobie chce byc 
+G                D//
+I nie trzeba 
+A                D//
+bys mowil cos Wystarczy zebys byl
+
+Bo nie ma wiekszej milosci niz ta, 
+gdy ktos zycie oddaje bym ja mogl zyc...
+
+chce byc z toba
+gdy jest mi dobrze i kiedy mi zle 
+przyjacielu
+przed toba otwieram serce`
+        }
+    ];
+
     // Funkcja do wczytywania listy piosenek
     function loadSongsList() {
         try {
@@ -9,54 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Wyczyść istniejącą listę
             songList.innerHTML = '';
 
-            // Lista piosenek (zdefiniowana lokalnie zamiast wczytywania z pliku)
-            const songs = [
-                {
-                    title: "Panie ulituj sie nad nami",
-                    filename: "Panie-ulituj-sie-nad-nami.txt"
-                },
-                {
-                    title: "Tekst akordy",
-                    filename: "tekstakordy.txt"
-                },
-                {
-                    title: "Przyjacielu",
-                    filename: "tekst2.txt"
-                }
-            ];
-
             // Dodaj każdą piosenkę do listy
-            songs.forEach(song => {
-                const songDiv = document.createElement('div');
-                songDiv.className = 'song-item';
-                songDiv.textContent = song.title;
-                
-                songDiv.addEventListener('click', () => {
-                    // Stwórz ukryty input typu file
-                    const input = document.createElement('input');
-                    input.type = 'file';
-                    input.style.display = 'none';
-                    input.accept = '.txt';
-                    
-                    input.addEventListener('change', (e) => {
-                        const file = e.target.files[0];
-                        if (!file) return;
-
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const content = e.target.result;
-                            localStorage.setItem('currentSong', content);
-                            window.location.href = 'Lyrics.html';
-                        };
-                        reader.readAsText(file);
-                    });
-
-                    // Symuluj kliknięcie w input
-                    document.body.appendChild(input);
-                    input.click();
-                    document.body.removeChild(input);
-                });
-                
+            SONGS_DATA.forEach(song => {
+                const songDiv = createSongElement(song.content, song.filename);
                 songList.appendChild(songDiv);
             });
 
@@ -79,6 +79,49 @@ document.addEventListener('DOMContentLoaded', () => {
             if (songList) {
                 songList.innerHTML = '<div class="error-message">Nie udało się załadować listy piosenek.</div>';
             }
+        }
+    }
+
+    // Funkcja do tworzenia elementu piosenki
+    function createSongElement(content, filename) {
+        const songDiv = document.createElement('div');
+        songDiv.className = 'song-item';
+        
+        // Parsuj metadane
+        const lines = content.split('\n');
+        let title = filename.replace('.txt', '').replace(/-/g, ' ');
+        
+        // Szukaj tytułu w zawartości pliku
+        for (const line of lines) {
+            if (line.startsWith('title:')) {
+                title = line.substring(6).trim().replace(/-/g, ' ');
+                break;
+            }
+        }
+        
+        songDiv.textContent = title;
+        
+        songDiv.addEventListener('click', () => {
+            localStorage.setItem('currentSong', content);
+            window.open('Lyrics.html', '_blank');
+        });
+        
+        return songDiv;
+    }
+
+    // Funkcja do zapisywania piosenki w localStorage
+    function saveSongToLocalStorage(filename, content) {
+        const songs = JSON.parse(localStorage.getItem('savedSongs') || '{}');
+        songs[filename] = content;
+        localStorage.setItem('savedSongs', JSON.stringify(songs));
+    }
+
+    // Funkcja do wczytywania zapisanych piosenek
+    function loadSavedSongs(songList) {
+        const songs = JSON.parse(localStorage.getItem('savedSongs') || '{}');
+        for (const [filename, content] of Object.entries(songs)) {
+            const songDiv = createSongElement(content, filename);
+            songList.appendChild(songDiv);
         }
     }
 
