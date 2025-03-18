@@ -1,3 +1,4 @@
+
 // File handling and format toggle functionality
 let availableSongs = [];
 
