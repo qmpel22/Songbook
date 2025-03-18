@@ -221,4 +221,35 @@ function generateSongPage(title, content) {
 
     // Open the new song page in a new tab
     window.open(url, '_blank'); // Open the Blob URL in a new tab
-} 
+}
+
+// Funkcja do pobierania listy piosenek
+function fetchSongList() {
+    fetch('/songs')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Błąd w odpowiedzi sieciowej');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const songListDiv = document.getElementById('songList');
+            songListDiv.innerHTML = ''; // Wyczyść poprzednią listę
+
+            if (data.length > 0) {
+                data.forEach(song => {
+                    const listItem = document.createElement('div');
+                    listItem.textContent = song.replace('.txt', ''); // Wyświetl tytuł bez rozszerzenia
+                    songListDiv.appendChild(listItem);
+                });
+            } else {
+                songListDiv.textContent = 'Brak piosenek w folderze.';
+            }
+        })
+        .catch(error => {
+            console.error('Błąd:', error);
+        });
+}
+
+// Wywołaj funkcję przy załadowaniu strony
+window.onload = fetchSongList; 

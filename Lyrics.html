@@ -6,9 +6,10 @@
     <title>Śpiewnik Online - Tekst i Akordy</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-lyrics.css">
-    <script src="script5.js" defer></script> <!-- Ensure this is the transposition logic script -->
+    <script src="script5.js" defer></script>
     <script src="script.js" defer></script>
-    <script src="script2.js" defer></script> <!-- Ensure this is loaded after script.js -->
+    <script src="script2.js" defer></script>
+    <script src="readsongs.js" defer></script> <!-- Include the new script -->
 </head>
 <body>
     <div class="header-container">
@@ -24,6 +25,8 @@
         <input type="text" id="searchInput" placeholder="Szukaj piosenki...">
         <div id="searchResults" class="search-results"></div>
     </div>
+    
+    <div id="songList" class="song-list">aaaaa</div> <!-- Add a div to display song titles -->
     
     <input type="file" id="fileInput" accept=".txt">
     <label for="toggleFormat">
@@ -53,6 +56,5 @@
         </div>
     </div>
 
-    <div id="transposition-info" class="transposition-info"></div>
 </body>
 </html>
