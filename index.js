@@ -4,73 +4,38 @@
 document.addEventListener('DOMContentLoaded', () => {
     const songList = document.getElementById('song-list');
 
-    // Zdefiniowana lista piosenek
-    const songs = [
-        {
-            title: "Panie ulituj sie nad nami",
-            content: `title: Panie ulituj sie nad nami
-author: 
-tag: O-Bogu, Chwalebna
-intro: CeFA
-link: https://www.youtube.com/watch?v=YZuFsI-bttM
-chords: 
-C                      e//
-Panie ulituj sie nad nami
-      F              a//
-bo w tobie nasze ocalenie
-    F                   e//
-wyciagnij reke nad chorymi
-F               G//
-uzdrow nasze serca`
-        },
-        {
-            title: "Przyjacielu",
-            content: `Przyjacielu chce zostac z toba 
-Przy tobie chce byc 
-I nie trzeba 
-bys mowil cos Wystarczy zebys byl/x2
-
-Bo nie ma wiekszej milosci niz ta, 
-gdy ktos zycie oddaje bym ja mogl zyc...
-
-chce byc z toba
-gdy jest mi dobrze i kiedy mi zle 
-przyjacielu
-przed toba otwieram serce/x2`
-        }
-    ];
-
     // Funkcja do wczytywania listy piosenek
     function loadSongsList() {
         // Wyczyść istniejącą listę
         songList.innerHTML = '';
 
-        // Dodaj każdą piosenkę do listy
-        songs.forEach(song => {
-            const songDiv = document.createElement('div');
-            songDiv.className = 'song-item';
-            songDiv.textContent = song.title;
+        // Wczytaj pliki HTML z folderu output
+        fetch('/output')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Błąd w odpowiedzi sieciowej');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Pętla do dodawania piosenek do listy
+                data.forEach(song => {
+                    const songDiv = document.createElement('div');
+                    songDiv.className = 'song-item';
+                    songDiv.textContent = song.replace('.html', ''); // Wyświetl tytuł bez rozszerzenia
 
-            songDiv.addEventListener('click', () => {
-                generateSongPage(song.title, song.content);
-            });
+                    // Dodaj link do pliku HTML
+                    songDiv.addEventListener('click', () => {
+                        window.location.href = `/output/${song}`;
+                    });
 
-            songList.appendChild(songDiv);
-        });
-
-        // Dodaj obsługę wyszukiwania
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase().trim();
-                const songItems = songList.querySelectorAll('.song-item');
-                
-                songItems.forEach(item => {
-                    const title = item.textContent.toLowerCase();
-                    item.style.display = title.includes(query) ? 'block' : 'none';
+                    songList.appendChild(songDiv);
                 });
+            })
+            .catch(error => {
+                console.error('Błąd:', error);
+                songList.innerHTML = '<div class="song-item">Nie udało się wczytać piosenek.</div>';
             });
-        }
     }
 
     // Wczytaj listę piosenek przy starcie

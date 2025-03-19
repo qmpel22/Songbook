@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boże-pomóż-nam-przetrwać - Śpiewnik Online</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style-lyrics.css">
+    <script src="../script5.js" defer></script>
+    <script src="../script.js" defer></script>
+    <script src="../script2.js" defer></script>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Śpiewnik Online</h1>
+        <nav class="nav-menu">
+            <a href="../index.html">Strona Główna</a>
+            <a href="../Lyrics.html" class="active">Piosenki</a>
+            <a href="../transponuj.html">Transponowanie</a>
+        </nav>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Szukaj piosenki...">
+        <div id="searchResults" class="search-results"></div>
+    </div>
+    
+    <div id="songList" class="song-list"></div> <!-- Lista piosenek -->
+
+    <input type="file" id="fileInput" accept=".txt">
+    <label for="toggleFormat">
+        <input type="checkbox" id="toggleFormat">
+        Zmień format wyświetlania
+    </label>
+
+    <div id="songDisplay" class="song-container">
+        <h2>Boże-pomóż-nam-przetrwać</h2>
+        <p><strong>Autor:</strong> </p>
+        <p><strong>Tag:</strong> O-Bogu, Chwalebna</p>
+        <p><strong>Intro:</strong> CeFA</p>
+        <p><strong>Link:</strong> <a href="https://www.youtube.com/watch?v=YZuFsI-bttM">https://www.youtube.com/watch?v=YZuFsI-bttM</a></p>
+        
+        <div id="song-lyrics" class="song-lyrics">
+            
+                <div class="song-line">
+                    <span class="chords">C e</span>
+                    <span class="lyrics"></span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords">F a</span>
+                    <span class="lyrics">Boże pomóż nam przetrwać</span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords">F e</span>
+                    <span class="lyrics"></span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords">F G</span>
+                    <span class="lyrics">W ciemności zrozumieć światło</span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords"></span>
+                    <span class="lyrics"></span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords"></span>
+                    <span class="lyrics">I w Tobie znaleźć pokój</span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords"></span>
+                    <span class="lyrics"></span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords"></span>
+                    <span class="lyrics">Tylko Ty nas uzdrowisz</span>
+                </div>
+            
+                <div class="song-line">
+                    <span class="chords"></span>
+                    <span class="lyrics"></span>
+                </div>
+            
+        </div>
+    </div>
+
+    <!-- Transpose Section -->
+    <div class="transpose-container">
+        <label>Transponuj akordy:</label>
+        <div class="transpose-buttons">
+            <button class="transpose-btn" data-value="-6">-6</button>
+            <button class="transpose-btn" data-value="-5">-5</button>
+            <button class="transpose-btn" data-value="-4">-4</button>
+            <button class="transpose-btn" data-value="-3">-3</button>
+            <button class="transpose-btn" data-value="-2">-2</button>
+            <button class="transpose-btn" data-value="-1">-1</button>
+            <button class="transpose-btn active" data-value="0">0</button>
+            <button class="transpose-btn" data-value="1">+1</button>
+            <button class="transpose-btn" data-value="2">+2</button>
+            <button class="transpose-btn" data-value="3">+3</button>
+            <button class="transpose-btn" data-value="4">+4</button>
+            <button class="transpose-btn" data-value="5">+5</button>
+        </div>
+    </div>
+
+</body>
+</html>

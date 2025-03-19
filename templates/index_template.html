@@ -42,15 +42,9 @@
         <h2>Lista piosenek</h2>
         <div id="song-list" class="song-list">
             <ul>
-                
-                    <li><a href="output/Panie-ulituj-sie-nad-nami.html">Panie-ulituj-sie-nad-nami</a></li>
-                
-                    <li><a href="output/piosenka2.html">Panie-ratuj-nas-w-trudzie</a></li>
-                
-                    <li><a href="output/piosenka3.html">Boże-pomóż-nam-przetrwać</a></li>
-                
-                    <li><a href="output/piosenka4.html">Panie-prosimy-o-pokój</a></li>
-                
+                {% for song in song_links %}
+                    <li><a href="output/{{ song.filename }}">{{ song.title }}</a></li>
+                {% endfor %}
             </ul>
         </div>
 
