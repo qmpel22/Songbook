@@ -1,4 +1,4 @@
-title: Panie-prosimy-o-pokój
+title: Panie prosimy o pokój
 author:
 tag: O-Bogu, Chwalebna
 intro: CeFA

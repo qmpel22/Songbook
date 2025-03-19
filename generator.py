@@ -30,8 +30,8 @@ for filename in os.listdir(SONGS_DIR):
             continue
         
         song_data = {}
-        chords = []
-        lyrics = []
+        chords_list = []
+        lyrics_list = []
         
         for line in lines:
             if line.startswith("title:"):
@@ -49,17 +49,21 @@ for filename in os.listdir(SONGS_DIR):
             else:
                 parts = line.split("//")
                 if len(parts) > 1:
-                    chords.append(parts[0].strip())
-                    lyrics.append(parts[1].strip())
+                    chords = parts[0].strip()
+                    lyrics = parts[1].strip()
+                    # Dodajemy akordy i tekst do odpowiednich list
+                    chords_list.append(chords)
+                    lyrics_list.append(lyrics)
                 else:
-                    lyrics.append(parts[0].strip())
+                    lyrics_list.append(parts[0].strip())
 
         # Sprawdzenie, czy "title" istnieje, jeśli nie, ustawiamy domyślny tytuł
         if "title" not in song_data:
             song_data["title"] = "Bez tytułu"  # Domyślny tytuł
 
-        song_data["content"] = "<br>".join(lyrics)
-        song_data["chords"] = "<br>".join(chords)
+        # Upewnij się, że akordy i tekst są odpowiednio wyrównane
+        song_data["content"] = "<br>".join(lyrics_list)
+        song_data["chords"] = "<br>".join(chords_list)
         
         # Renderowanie HTML dla piosenki
         rendered_html = template.render(song=song_data)

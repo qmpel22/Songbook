@@ -1,4 +1,3 @@
-
 // File handling and format toggle functionality
 let availableSongs = [];
 
@@ -195,16 +194,30 @@ function processLine(line) {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
     const toggleFormat = document.getElementById('toggleFormat');
-    if (toggleFormat) {
-        toggleFormat.addEventListener('change', function() {
-            const songLines = document.querySelectorAll('.song-line');
-            songLines.forEach(line => {
-                line.className = 'song-line ' + (this.checked ? 'vertical' : 'horizontal');
-            });
+    const songLines = document.querySelectorAll('.song-line');
+
+    toggleFormat.addEventListener('change', () => {
+        songLines.forEach(line => {
+            const chords = line.querySelector('.chords').innerHTML;
+            const lyrics = line.querySelector('.lyrics').innerHTML;
+
+            if (toggleFormat.checked) {
+                // Zmiana formatu na pionowy
+                line.innerHTML = `
+                    <div class="chords">${chords}</div>
+                    <div class="lyrics">${lyrics}</div>
+                `;
+            } else {
+                // Zmiana formatu na poziomy
+                line.innerHTML = `
+                    <span class="lyrics">${lyrics}</span>
+                    <span class="chords">${chords}</span>
+                `;
+            }
         });
-    }
+    });
     
     // Initialize file handling
     initFileHandling();

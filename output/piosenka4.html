@@ -3,12 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panie-prosimy-o-pokój - Śpiewnik Online</title>
+    <title>Panie prosimy o pokój - Śpiewnik Online</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../style-lyrics.css">
-    <script src="../script5.js" defer></script>
-    <script src="../script.js" defer></script>
-    <script src="../script2.js" defer></script>
 </head>
 <body>
     <div class="header-container">
@@ -27,14 +24,13 @@
     
     <div id="songList" class="song-list"></div> <!-- Lista piosenek -->
 
-    <input type="file" id="fileInput" accept=".txt">
     <label for="toggleFormat">
         <input type="checkbox" id="toggleFormat">
         Zmień format wyświetlania
     </label>
 
     <div id="songDisplay" class="song-container">
-        <h2>Panie-prosimy-o-pokój</h2>
+        <h2>Panie prosimy o pokój</h2>
         <p><strong>Autor:</strong> </p>
         <p><strong>Tag:</strong> O-Bogu, Chwalebna</p>
         <p><strong>Intro:</strong> CeFA</p>
@@ -42,72 +38,76 @@
         
         <div id="song-lyrics" class="song-lyrics">
             
-                <div class="song-line">
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
                     <span class="chords">C e</span>
-                    <span class="lyrics"></span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords">F a</span>
+                <div class="song-line horizontal">
                     <span class="lyrics">Panie, prosimy o pokój</span>
+                    <span class="chords">F a</span>
                 </div>
             
-                <div class="song-line">
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
                     <span class="chords">F e</span>
-                    <span class="lyrics"></span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords">F G</span>
+                <div class="song-line horizontal">
                     <span class="lyrics">Zjednocz nasze serca w miłości</span>
+                    <span class="chords">F G</span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords"></span>
+                <div class="song-line horizontal">
                     <span class="lyrics"></span>
+                    <span class="chords"></span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords"></span>
+                <div class="song-line horizontal">
                     <span class="lyrics">W Twoich dłoniach nasze troski</span>
+                    <span class="chords"></span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords"></span>
+                <div class="song-line horizontal">
                     <span class="lyrics"></span>
+                    <span class="chords"></span>
                 </div>
             
-                <div class="song-line">
-                    <span class="chords"></span>
+                <div class="song-line horizontal">
                     <span class="lyrics">Prowadź nas do życia pełnią</span>
-                </div>
-            
-                <div class="song-line">
                     <span class="chords"></span>
+                </div>
+            
+                <div class="song-line horizontal">
                     <span class="lyrics"></span>
+                    <span class="chords"></span>
                 </div>
             
         </div>
     </div>
 
-    <!-- Transpose Section -->
-    <div class="transpose-container">
-        <label>Transponuj akordy:</label>
-        <div class="transpose-buttons">
-            <button class="transpose-btn" data-value="-6">-6</button>
-            <button class="transpose-btn" data-value="-5">-5</button>
-            <button class="transpose-btn" data-value="-4">-4</button>
-            <button class="transpose-btn" data-value="-3">-3</button>
-            <button class="transpose-btn" data-value="-2">-2</button>
-            <button class="transpose-btn" data-value="-1">-1</button>
-            <button class="transpose-btn active" data-value="0">0</button>
-            <button class="transpose-btn" data-value="1">+1</button>
-            <button class="transpose-btn" data-value="2">+2</button>
-            <button class="transpose-btn" data-value="3">+3</button>
-            <button class="transpose-btn" data-value="4">+4</button>
-            <button class="transpose-btn" data-value="5">+5</button>
-        </div>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleFormat = document.getElementById('toggleFormat');
+            const songLines = document.querySelectorAll('.song-line');
 
+            toggleFormat.addEventListener('change', () => {
+                songLines.forEach(line => {
+                    const chords = line.querySelector('.chords').innerHTML;
+                    const lyrics = line.querySelector('.lyrics').innerHTML;
+
+                    if (toggleFormat.checked) {
+                        // Switch to vertical format: chords above lyrics
+                        line.classList.remove('horizontal');
+                        line.classList.add('vertical');
+                    } else {
+                        // Switch back to horizontal format: chords beside lyrics
+                        line.classList.remove('vertical');
+                        line.classList.add('horizontal');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
