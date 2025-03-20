@@ -6,8 +6,11 @@
     <title>Panie-ratuj-nas-w-trudzie - Śpiewnik Online</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../style-lyrics.css">
+<<<<<<< HEAD
     <script src="../script5.js" defer></script>
     <script src="../script2.js" defer></script>
+=======
+>>>>>>> 38078cb2e486a295d66bcf2a4a38dd07fdc2755c
 </head>
 <body>
     <div class="header-container">
@@ -36,6 +39,7 @@
         <p><strong>Autor:</strong> </p>
         <p><strong>Tag:</strong> O-Bogu, Chwalebna</p>
         <p><strong>Intro:</strong> CeFA</p>
+<<<<<<< HEAD
         
         <div id="song-lyrics" class="song-lyrics">
             <div class="lyrics-container">
@@ -141,5 +145,77 @@
     </script>
     
 
+=======
+        <p><strong>Link:</strong> <a href="https://www.youtube.com/watch?v=YZuFsI-bttM">https://www.youtube.com/watch?v=YZuFsI-bttM</a></p>
+        
+        <div id="song-lyrics" class="song-lyrics">
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
+                    <span class="chords">C e</span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics">Panie ratuj nas w trudzie</span>
+                    <span class="chords">F a</span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
+                    <span class="chords">F e</span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics">Twoja moc jest naszą nadzieją</span>
+                    <span class="chords">F G</span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
+                    <span class="chords"></span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics">Zanurz nas w swej łasce, Panie</span>
+                    <span class="chords"></span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics"></span>
+                    <span class="chords"></span>
+                </div>
+            
+                <div class="song-line horizontal">
+                    <span class="lyrics">Prowadź nas przez burze życia</span>
+                    <span class="chords"></span>
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleFormat = document.getElementById('toggleFormat');
+            const songLines = document.querySelectorAll('.song-line');
+
+            toggleFormat.addEventListener('change', () => {
+                songLines.forEach(line => {
+                    const chords = line.querySelector('.chords').innerHTML;
+                    const lyrics = line.querySelector('.lyrics').innerHTML;
+
+                    if (toggleFormat.checked) {
+                        // Switch to vertical format: chords above lyrics
+                        line.classList.remove('horizontal');
+                        line.classList.add('vertical');
+                    } else {
+                        // Switch back to horizontal format: chords beside lyrics
+                        line.classList.remove('vertical');
+                        line.classList.add('horizontal');
+                    }
+                });
+            });
+        });
+    </script>
+>>>>>>> 38078cb2e486a295d66bcf2a4a38dd07fdc2755c
 </body>
 </html>

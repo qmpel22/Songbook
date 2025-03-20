@@ -15,7 +15,11 @@ env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
 template = env.get_template("song_template.html")
 
 # Lista do przechowywania linków do piosenek na stronie głównej
+<<<<<<< HEAD
 song_links = [] 
+=======
+song_links = []
+>>>>>>> 38078cb2e486a295d66bcf2a4a38dd07fdc2755c
 
 # Przetwarzanie plików w katalogu songs
 for filename in os.listdir(SONGS_DIR):
@@ -84,9 +88,12 @@ for filename in os.listdir(SONGS_DIR):
             "filename": filename.replace(".txt", ".html")
         })
 
+<<<<<<< HEAD
 # Posortuj piosenki alfabetycznie według tytułu
 song_links = sorted(song_links, key=lambda x: x["title"])
 
+=======
+>>>>>>> 38078cb2e486a295d66bcf2a4a38dd07fdc2755c
 # Teraz zaktualizuj index.html z listą piosenek
 index_template = env.get_template("index_template.html")
 
