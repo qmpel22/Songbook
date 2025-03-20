@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panie-ulituj-sie-nad-nami - Śpiewnik Online</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style-lyrics.css">
+    <script src="../script5.js" defer></script>
+    <script src="../script2.js" defer></script>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Śpiewnik Online</h1>
+        <nav class="nav-menu">
+            <a href="../index.html">Strona Główna</a>
+            <a href="../Lyrics.html" class="active">Piosenki</a>
+            <a href="../transponuj.html">Transponowanie</a>
+        </nav>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Szukaj piosenki...">
+        <div id="searchResults" class="search-results"></div>
+    </div>
+    
+    <div id="songList" class="song-list"></div> <!-- Lista piosenek -->
+
+    <label for="toggleFormat">
+        <input type="checkbox" id="toggleFormat">
+        Zmień format wyświetlania
+    </label>
+
+    <div id="songDisplay" class="song-container">
+        <h2>Panie-ulituj-sie-nad-nami</h2>
+        <p><strong>Autor:</strong> </p>
+        <p><strong>Tag:</strong> O-Bogu,Chwalebna</p>
+        <p><strong>Intro:</strong> CeFA</p>
+        
+        <div id="song-lyrics" class="song-lyrics">
+            <div class="lyrics-container">
+                
+                    <div class="song-line">
+                        <span class="lyrics"></span><br>
+                        <span class="chords">C                      e</span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics">Panie ulituj sie nad nami</span><br>
+                        <span class="chords">F              a</span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics"></span><br>
+                        <span class="chords">F                   e</span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics">bo w tobie nasze ocalenie</span><br>
+                        <span class="chords">F               G</span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics"></span><br>
+                        <span class="chords"></span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics">wyciagnij reke nad chorymi</span><br>
+                        <span class="chords"></span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics"></span><br>
+                        <span class="chords"></span>
+                    </div>
+                
+                    <div class="song-line">
+                        <span class="lyrics">uzdrow nasze serca</span><br>
+                        <span class="chords"></span>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="transpose-container">
+        <label>Transponuj akordy:</label>
+        <div class="transpose-buttons">
+            <button class="transpose-btn" data-value="-6">-6</button>
+            <button class="transpose-btn" data-value="-5">-5</button>
+            <button class="transpose-btn" data-value="-4">-4</button>
+            <button class="transpose-btn" data-value="-3">-3</button>
+            <button class="transpose-btn" data-value="-2">-2</button>
+            <button class="transpose-btn" data-value="-1">-1</button>
+            <button class="transpose-btn active" data-value="0">0</button>
+            <button class="transpose-btn" data-value="1">+1</button>
+            <button class="transpose-btn" data-value="2">+2</button>
+            <button class="transpose-btn" data-value="3">+3</button>
+            <button class="transpose-btn" data-value="4">+4</button>
+            <button class="transpose-btn" data-value="5">+5</button>
+        </div>
+    </div>
+
+    <div id="video-thumbnail-container"></div>
+    <div id="iframeContainer" style="display: none;"></div>
+    
+    <script>
+        const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Podany link
+    
+        window.onload = () => {
+            const videoId = extractVideoId(youtubeLink);
+            
+            if (videoId) {
+                // Generowanie miniaturki
+                const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
+                document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
+            } else {
+                alert('Nieprawidłowy link do YouTube');
+            }
+        };
+    
+        function extractVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+    
+        function loadVideo(videoId) {
+            // Ukryj miniaturkę
+            document.getElementById('video-thumbnail-container').style.display = 'none';
+    
+            // Tworzymy iframe z odtwarzaczem YouTube
+            const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+    
+            // Wstawiamy iframe do kontenera
+            document.getElementById('iframeContainer').innerHTML = iframe;
+    
+            // Pokaż iframe
+            document.getElementById('iframeContainer').style.display = 'block';
+        }
+    </script>
+    
+
+</body>
+</html>

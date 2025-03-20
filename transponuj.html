@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transponowanie - Śpiewnik Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-transponuj.css">
+</head>
+<body>
+    <div class="header-container">
+        <h1>Śpiewnik Online</h1>
+        <nav class="nav-menu">
+            <a href="index.html">Strona Główna</a>
+            <a href="Lyrics.html">Piosenki</a>
+            <a href="transponuj.html" class="active">Transponowanie</a>
+        </nav>
+    </div>
+
+    <div class="song-container">
+        <div class="transpose-section">
+            <div class="song-metadata">
+                <h2>Wpisz nuty do transponowania</h2>
+                <textarea id="notesInput" placeholder="Wpisz tutaj nuty..." rows="3"></textarea>
+            </div>
+        
+            <div class="transpose-container">
+                <label>Transponuj akordy:</label>
+                <div class="transpose-buttons">
+                    <button class="transpose-btn" data-value="-6">-6</button>
+                    <button class="transpose-btn" data-value="-5">-5</button>
+                    <button class="transpose-btn" data-value="-4">-4</button>
+                    <button class="transpose-btn" data-value="-3">-3</button>
+                    <button class="transpose-btn" data-value="-2">-2</button>
+                    <button class="transpose-btn" data-value="-1">-1</button>
+                    <button class="transpose-btn active" data-value="0">0</button>
+                    <button class="transpose-btn" data-value="1">+1</button>
+                    <button class="transpose-btn" data-value="2">+2</button>
+                    <button class="transpose-btn" data-value="3">+3</button>
+                    <button class="transpose-btn" data-value="4">+4</button>
+                    <button class="transpose-btn" data-value="5">+5</button>
+                </div>
+            </div>
+        
+            <div id="transposedNotes" class="song-metadata">
+                <h2>Przetransponowane nuty:</h2>
+                <pre id="transposedOutput"></pre>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="transponuj.js"></script>
+</body>
+</html>

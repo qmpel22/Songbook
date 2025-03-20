@@ -1,0 +1,60 @@
+.transpose-section {
+    margin-bottom: 0;
+}
+
+.transpose-section .song-metadata {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.transpose-section .transpose-container {
+    margin: 2px 0;
+    padding: 2px 0;
+}
+
+.transpose-section #transposedNotes {
+    margin-top: 2px;
+    border-bottom: none;
+}
+
+.transpose-section h2 {
+    margin-bottom: 5px;
+    font-size: 1.5em;
+}
+
+.transpose-section label {
+    margin: 5px;
+}
+
+.transpose-section textarea {
+    margin: 2px 0 !important;
+    width: 100%;
+    padding: 5px;
+    border: 2px solid #97D8C4;
+    border-radius: 8px;
+    font-family: monospace;
+}
+
+#transposedOutput {
+    margin-top: 2px;
+    white-space: pre-wrap;
+    font-family: monospace;
+    background: #f5f5f5;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.notation-toggle {
+    background-color: #4059AD !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s !important;
+}
+
+.notation-toggle:hover {
+    background-color: #97D8C4 !important;
+} 

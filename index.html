@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Śpiewnik - Strona Główna</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header-container">
+        <h1>Śpiewnik Online</h1>
+        <nav class="nav-menu">
+            <a href="index.html" class="active">Strona Główna</a>
+            <a href="Lyrics.html">Piosenki</a>
+            <a href="transponuj.html">Transponowanie</a>
+        </nav>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Wyszukaj piosenkę..." autocomplete="off" onkeyup="searchSongs()">
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <div class="song-container">
+        <div class="song-metadata">
+            <h2>Witaj w Śpiewniku Online!</h2>
+            <p>Twoja kolekcja piosenek z akordami w jednym miejscu</p>
+        </div>
+
+        <div class="transpose-container">
+            <label>Funkcje:</label>
+            <div class="transpose-buttons">
+                <button class="transpose-btn" onclick="window.location.href='Lyrics.html'">
+                    <span>📝</span>
+                </button>
+                <button class="transpose-btn" onclick="window.location.href='transponuj.html'">
+                    <span>🎵</span>
+                </button>
+            </div>
+        </div>
+
+        <h2>Lista piosenek</h2>
+        <div id="song-list" class="song-list">
+            <ul>
+                <li><a href="output/song1.html" class="song-title">Boże pomóż nam przetrwać</a></li>
+                <li><a href="output/song2.html" class="song-title">Panie prosimy o pokój</a></li>
+                <li><a href="output/song3.html" class="song-title">Panie-ratuj-nas-w-trudzie</a></li>
+                <li><a href="output/song4.html" class="song-title">Panie-ulituj-sie-nad-nami</a></li>
+            </ul>
+        </div>
+
+        <div class="song-metadata">
+            <p class="intro">
+                • Wyszukuj piosenki po tytule lub wykonawcy<br>
+                • Transpozycja akordów do wybranej tonacji<br>
+                • Możliwość wyświetlania akordów nad lub obok tekstu<br>
+                • Automatyczne wczytywanie piosenek z folder
+            </p>
+        </div>
+    </div>
+    <script>
+        // Funkcja usuwająca diakrytyki
+        function removeDiacritics(str) {
+            const diacritics = [
+                { base: 'a', letters: /[áàäâã]/g },
+                { base: 'e', letters: /[éèêë]/g },
+                { base: 'i', letters: /[íìîï]/g },
+                { base: 'o', letters: /[óòôö]/g },
+                { base: 'u', letters: /[úùûü]/g },
+                { base: 'c', letters: /[ćč]/g },
+                { base: 'n', letters: /[ń]/g },
+                { base: 's', letters: /[śš]/g },
+                { base: 'z', letters: /[źż]/g }
+            ];
+            for (let i = 0; i < diacritics.length; i++) {
+                str = str.replace(diacritics[i].letters, diacritics[i].base);
+            }
+            return str;
+        }
+    
+        // Przy ładowaniu strony prekompilujemy przetworzone tytuły
+        document.addEventListener("DOMContentLoaded", function(){
+            const items = document.querySelectorAll("#song-list li");
+            items.forEach(item => {
+                const link = item.querySelector(".song-title");
+                if (link) {
+                    const normalized = removeDiacritics(link.textContent.toLowerCase());
+                    item.dataset.normalized = normalized;
+                }
+            });
+        });
+    
+        // Funkcja wyszukiwania
+        function searchSongs() {
+            const input = document.getElementById("searchInput");
+            const filter = removeDiacritics(input.value.trim().toLowerCase());
+            const items = document.querySelectorAll("#song-list li");
+            const searchResultsContainer = document.getElementById("searchResults");
+    
+            // Czyścimy kontener wyników
+            searchResultsContainer.innerHTML = '';
+    
+            // Jeśli filtr jest pusty, pokaż wszystkie elementy i wyjdź
+            if (filter === "") {
+                items.forEach(item => item.style.display = '');
+                return;
+            }
+    
+            const results = [];
+            items.forEach(item => {
+                const normalizedTitle = item.dataset.normalized || "";
+                if (normalizedTitle.includes(filter)) {
+                    item.style.display = '';
+                    results.push(item);
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+    
+            // Wyświetlamy wyniki w dedykowanym kontenerze
+            if (results.length > 0) {
+                const resultHeader = document.createElement("p");
+                resultHeader.textContent = "Wyniki wyszukiwania:";
+                searchResultsContainer.appendChild(resultHeader);
+    
+                const resultList = document.createElement("ul");
+                results.forEach(item => {
+                    // Używamy klonów, aby nie usuwać elementów z oryginalnej listy
+                    resultList.appendChild(item.cloneNode(true));
+                });
+                searchResultsContainer.appendChild(resultList);
+            } else {
+                searchResultsContainer.textContent = "Brak wyników wyszukiwania.";
+            }
+        }
+    </script>
+    
+
+    
+</body>
+</html>
