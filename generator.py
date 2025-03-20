@@ -12,14 +12,18 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Załaduj szablon Jinja2
 env = Environment(loader=FileSystemLoader(TEMPLATE_DIR))
-template = env.get_template("song_template.html")
+song_template = env.get_template("song_template.html")
+index_template = env.get_template("index_template.html")
+
+# Słownik do przechowywania piosenek po tagach
+tags = {}
 
 # Lista do przechowywania linków do piosenek na stronie głównej
 song_links = []
 
 # Przetwarzanie plików w katalogu songs
 for filename in os.listdir(SONGS_DIR):
-    if filename.endswith(".txt"):  # Zakładamy, że pliki z tekstami piosenek są w .txt
+    if filename.endswith(".txt"):
         song_path = os.path.join(SONGS_DIR, filename)
         
         try:
@@ -45,30 +49,33 @@ for filename in os.listdir(SONGS_DIR):
             elif line.startswith("link:"):
                 song_data["link"] = line.replace("link:", "").strip()
             elif line.startswith("chords:"):
-                continue  # Pomijamy linię "chords:"
+                continue
             else:
                 parts = line.split("//")
                 if len(parts) > 1:
                     chords = parts[0].strip()
                     lyrics = parts[1].strip()
-                    # Dodajemy akordy i tekst do odpowiednich list
                     chords_list.append(chords)
                     lyrics_list.append(lyrics)
                 else:
                     lyrics_list.append(parts[0].strip())
 
-        # Sprawdzenie, czy "title" istnieje, jeśli nie, ustawiamy domyślny tytuł
         if "title" not in song_data:
-            song_data["title"] = "Bez tytułu"  # Domyślny tytuł
-
-        # Upewnij się, że akordy i tekst są odpowiednio wyrównane
+            song_data["title"] = "Bez tytułu"
+        
         song_data["content"] = "<br>".join(lyrics_list)
         song_data["chords"] = "<br>".join(chords_list)
-        
-        # Renderowanie HTML dla piosenki
-        rendered_html = template.render(song=song_data)
 
-        # Zapisanie wygenerowanej strony
+        # Dodajemy piosenkę do słownika według tagu
+        tag = song_data["tag"]
+        if tag not in tags:
+            tags[tag] = []
+        tags[tag].append(song_data)
+
+        # Renderowanie HTML dla piosenki
+        related_songs = [s for s in tags.get(tag, []) if s["title"] != song_data["title"]][:3]  # Only 3 related songs
+        rendered_html = song_template.render(song=song_data, related_songs=related_songs)
+
         output_filename = filename.replace(".txt", ".html")
         output_path = os.path.join(OUTPUT_DIR, output_filename)
         
@@ -86,9 +93,6 @@ for filename in os.listdir(SONGS_DIR):
         })
 
 # Teraz zaktualizuj index.html z listą piosenek
-index_template = env.get_template("index_template.html")
-
-# Renderowanie strony głównej z listą piosenek
 rendered_index_html = index_template.render(song_links=song_links)
 
 # Zapisanie zaktualizowanego index.html w głównym katalogu

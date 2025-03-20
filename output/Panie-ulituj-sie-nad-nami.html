@@ -82,27 +82,11 @@
             </div>
         </div>
     </div>
-    <div class="transpose-container">
-        <label>Transponuj akordy:</label>
-        <div class="transpose-buttons">
-            <button class="transpose-btn" data-value="-6">-6</button>
-            <button class="transpose-btn" data-value="-5">-5</button>
-            <button class="transpose-btn" data-value="-4">-4</button>
-            <button class="transpose-btn" data-value="-3">-3</button>
-            <button class="transpose-btn" data-value="-2">-2</button>
-            <button class="transpose-btn" data-value="-1">-1</button>
-            <button class="transpose-btn active" data-value="0">0</button>
-            <button class="transpose-btn" data-value="1">+1</button>
-            <button class="transpose-btn" data-value="2">+2</button>
-            <button class="transpose-btn" data-value="3">+3</button>
-            <button class="transpose-btn" data-value="4">+4</button>
-            <button class="transpose-btn" data-value="5">+5</button>
-        </div>
-    </div>
-
+    
+    <!-- Sekcja związana z YouTube -->
     <div id="video-thumbnail-container"></div>
     <div id="iframeContainer" style="display: none;"></div>
-    
+
     <script>
         const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Podany link
     
@@ -110,7 +94,6 @@
             const videoId = extractVideoId(youtubeLink);
             
             if (videoId) {
-                // Generowanie miniaturki
                 const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
                 document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
             } else {
@@ -125,20 +108,35 @@
         }
     
         function loadVideo(videoId) {
-            // Ukryj miniaturkę
             document.getElementById('video-thumbnail-container').style.display = 'none';
-    
-            // Tworzymy iframe z odtwarzaczem YouTube
             const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-    
-            // Wstawiamy iframe do kontenera
             document.getElementById('iframeContainer').innerHTML = iframe;
-    
-            // Pokaż iframe
             document.getElementById('iframeContainer').style.display = 'block';
         }
     </script>
-    
 
+    <!-- Sekcja powiązanych piosenek -->
+    <div class="related-songs">
+        <h3>Piosenki o tym samym tagu:</h3>
+        <ul id="related-songs-list">
+            <!-- Here we will dynamically insert related songs -->
+        </ul>
+    </div>
+
+    <script>
+        // Function to display related songs dynamically based on tags (you can update this logic as per your needs)
+        const relatedSongs = [
+            { title: "Piosenka 1", url: "song1.html" },
+            { title: "Piosenka 2", url: "song2.html" },
+            { title: "Piosenka 3", url: "song3.html" }
+        ];
+
+        const relatedSongsList = document.getElementById('related-songs-list');
+        relatedSongs.forEach(song => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="${song.url}">${song.title}</a>`;
+            relatedSongsList.appendChild(listItem);
+        });
+    </script>
 </body>
 </html>
