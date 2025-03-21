@@ -73,10 +73,16 @@ for filename in os.listdir(SONGS_DIR):
         tags[tag].append(song_data)
 
         # Renderowanie HTML dla piosenki
-        related_songs = [s for s in tags.get(tag, []) if s["title"] != song_data["title"]][:3]  # Only 3 related songs
-        rendered_html = song_template.render(song=song_data, related_songs=related_songs)
+        related_songs = []  # Inicjalizacja listy powiązanych piosenek
+        for t in tags.values():
+            # Dodajemy piosenki z innych tagów, ale z tym samym tagiem
+            related_songs.extend([s for s in t if s["title"] != song_data["title"]])  
+        related_songs = related_songs[:3]  # Maksymalnie 3 powiązane piosenki
+        
+        # Renderowanie strony piosenki
+        rendered_html = song_template.render(song=song_data, related_songs=related_songs, song_links=song_links)
 
-        output_filename = filename.replace(".txt", ".html")
+        output_filename = song_data["title"].replace(" ", "-").replace(",", "").replace(":", "").replace("ł", "l") + ".html"
         output_path = os.path.join(OUTPUT_DIR, output_filename)
         
         try:

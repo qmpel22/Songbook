@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ song.title }}</title>
+    <title>Boże pomóż nam przetrwać</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../style-lyrics.css">
     <script src="../songs.js" defer></script>
@@ -31,18 +31,18 @@
     </label>
 
     <div id="songDisplay" class="song-container">
-        <h2>{{ song.title }}</h2>
-        <p><strong>Autor: {{ song.author }}</strong> </p>
-        <p><strong>Tag:</strong> {{ song.tag }}</p>
-        {% if song.intro %}
-        <h3>Intro: {{ song.intro }}</h3>
-        {% endif %}
+        <h2>Boże pomóż nam przetrwać</h2>
+        <p><strong>Autor: </strong> </p>
+        <p><strong>Tag:</strong> O-Bogu, Chwalebna</p>
+        
+        <h3>Intro: CeFA</h3>
+        
         
         <div id="song-lyrics" class="song-lyrics">
             <div class="lyrics-container">
                 <div class="song-line">
-                    <span class="lyrics">{{ song.content }}</span><br>
-                    <span class="chords">{{ song.chords }}</span>
+                    <span class="lyrics"><br>Boże pomóż nam przetrwać<br><br>W ciemności zrozumieć światło<br><br>I w Tobie znaleźć pokój<br><br>Tylko Ty nas uzdrowisz<br></span><br>
+                    <span class="chords">C e<br>F a<br>F e<br>F G</span>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
     <div id="iframeContainer" style="display: none;"></div>
 
     <script>
-        const youtubeLink = "{{ song.link }}"; // Use the song's link if available
+        const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Use the song's link if available
     
         window.onload = () => {
             const videoId = extractVideoId(youtubeLink);
@@ -84,13 +84,7 @@
     <!-- Lista wszystkich piosenek -->
     <h3>Wszystkie Piosenki:</h3>
     <ul id="all-songs-list">
-        {% for song_link in song_links %}
-            <li>
-                <a href="../output/{{ song_link.filename }}" class="song-link">
-                    {{ song_link.title }}
-                </a>
-            </li>
-        {% endfor %}
+        
     </ul>
 
 </body>

@@ -2,7 +2,7 @@ title: Panie prosimy o pokój
 author:
 tag: O-Bogu, Chwalebna
 intro: CeFA
-link: https://www.youtube.com/watch?v=YZuFsI-bttM
+link:https://www.youtube.com/watch?v=yKtAEfVeUDQ
 chords:
 C e//
 Panie, prosimy o pokój
