@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panie prosimy o pokój</title>
     <link rel="stylesheet" href="../style.css">
-    <link rel="stylesheet" href="../style-lyrics.css">
     <script src="../songs.js" defer></script>
 </head>
 <body>
@@ -30,68 +29,121 @@
         Zmień format wyświetlania
     </label>
 
-    <div id="songDisplay" class="song-container">
-        <h2>Panie prosimy o pokój</h2>
-        <p><strong>Autor: </strong> </p>
-        <p><strong>Tag:</strong> O-Bogu, Chwalebna</p>
-        
-        <h3>Intro: CeFA</h3>
-        
-        
-        <div id="song-lyrics" class="song-lyrics">
-            <div class="lyrics-container">
-                <div class="song-line">
-                    <span class="lyrics"><br>Panie, prosimy o pokój<br><br>Zjednocz nasze serca w miłości<br><br>W Twoich dłoniach nasze troski<br><br>Prowadź nas do życia pełnią<br></span><br>
-                    <span class="chords">C e<br>F a<br>F e<br>F G</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Sekcja związana z YouTube -->
-    <div id="video-thumbnail-container"></div>
-    <div id="iframeContainer" style="display: none;"></div>
+    <div class="song">
+        <h1>Panie prosimy o pokój</h1>
+        <p><strong>Autor:</strong> </p>
+        <p><strong>Tagi:</strong> O-Bogu, Chwalebna</p>
+        <p><strong>Intro:</strong> CeFA</p>
 
-    <script>
-        const youtubeLink = "https://www.youtube.com/watch?v=yKtAEfVeUDQ"; // Use the song's link if available
-    
-        window.onload = () => {
-            const videoId = extractVideoId(youtubeLink);
+        
+        <div class="song-lyrics">
             
-            if (videoId) {
-                const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
-                document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
-            } else {
-                alert('Nieprawidłowy link do YouTube');
+                <div class="song-line">
+                    <div class="chords">C e</div>
+                    <div class="lyrics"></div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords"></div>
+                    <div class="lyrics">Panie, prosimy o pokój</div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords">F a</div>
+                    <div class="lyrics"></div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords"></div>
+                    <div class="lyrics">Zjednocz nasze serca w miłości</div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords">F e</div>
+                    <div class="lyrics"></div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords"></div>
+                    <div class="lyrics">W Twoich dłoniach nasze troski</div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords">F G</div>
+                    <div class="lyrics"></div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords"></div>
+                    <div class="lyrics">Prowadź nas do życia pełnią</div>
+                </div>
+            
+                <div class="song-line">
+                    <div class="chords"></div>
+                    <div class="lyrics"></div>
+                </div>
+            
+        </div>
+
+        <!-- Sekcja związana z YouTube -->
+        <div id="video-thumbnail-container"></div>
+        <div id="iframeContainer" style="display: none;"></div>
+
+        <script>
+            const youtubeLink = "https://www.youtube.com/watch?v=yKtAEfVeUDQ"; // Use the song's link if available
+        
+            window.onload = () => {
+                const videoId = extractVideoId(youtubeLink);
+                
+                if (videoId) {
+                    const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
+                    document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
+                } else {
+                    alert('Nieprawidłowy link do YouTube');
+                }
+            };
+        
+            function extractVideoId(url) {
+                const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const match = url.match(regex);
+                return match ? match[1] : null;
             }
-        };
-    
-        function extractVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-    
-        function loadVideo(videoId) {
-            document.getElementById('video-thumbnail-container').style.display = 'none';
-            const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-            document.getElementById('iframeContainer').innerHTML = iframe;
-            document.getElementById('iframeContainer').style.display = 'block';
-        }
-    </script>
-
-
-    <!-- Lista piosenek o tym samym tagu -->
-    <h3>Inne piosenki z tego samego tagu:</h3>
-    <ul id="related-songs-list">
         
-            <li>
-                <a href="../output/Boże-pomóż-nam-przetrwać.html" class="song-link">
-                    Boże pomóż nam przetrwać
-                </a>
-            </li>
-        
-    </ul>
+            function loadVideo(videoId) {
+                document.getElementById('video-thumbnail-container').style.display = 'none';
+                const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+                document.getElementById('iframeContainer').innerHTML = iframe;
+                document.getElementById('iframeContainer').style.display = 'block';
+            }
+
+            // Funkcja do przełączania formatu
+            function initFormatToggle() {
+                const toggleCheckbox = document.getElementById("toggleFormat");
+                toggleCheckbox.addEventListener("change", function() {
+                    const songLines = document.querySelectorAll(".song-line");
+                    songLines.forEach(line => {
+                        if (this.checked) {
+                            line.classList.remove("horizontal");
+                            line.classList.add("vertical");
+                        } else {
+                            line.classList.remove("vertical");
+                            line.classList.add("horizontal");
+                        }
+                    });
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                initFormatToggle();
+            });
+        </script>
+
+        <!-- Lista piosenek o tym samym tagu -->
+        <h3>Inne piosenki z tego samego tagu:</h3>
+        <ul id="related-songs-list">
+            
+        </ul>
+    </div>
 
 </body>
 </html>

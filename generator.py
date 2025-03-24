@@ -21,7 +21,7 @@ tags = {}
 # Lista do przechowywania linków do piosenek na stronie głównej
 song_links = []
 
-# Przetwarzanie plików w katalogu songs
+# Przetwarzanie piosenki i akordów
 for filename in os.listdir(SONGS_DIR):
     if filename.endswith(".txt"):
         song_path = os.path.join(SONGS_DIR, filename)
@@ -53,12 +53,15 @@ for filename in os.listdir(SONGS_DIR):
             else:
                 parts = line.split("//")
                 if len(parts) > 1:
-                    chords = parts[0].strip()
-                    lyrics = parts[1].strip()
+                    # Rozdziel akordy i tekst poprawnie
+                    chords = parts[0].strip()  # Akordy przed "//"
+                    lyrics = parts[1].strip()  # Tekst po "//"
                     chords_list.append(chords)
                     lyrics_list.append(lyrics)
                 else:
+                    # Jeśli tylko tekst (brak "//"), dodajemy do listy tekstów
                     lyrics_list.append(parts[0].strip())
+                    chords_list.append('')  # Dodajemy pustą wartość dla brakujących akordów
 
         if "title" not in song_data:
             song_data["title"] = "Bez tytułu"
@@ -66,11 +69,8 @@ for filename in os.listdir(SONGS_DIR):
         song_data["content"] = "<br>".join(lyrics_list)
         song_data["chords"] = "<br>".join(chords_list)
 
-        # Dodajemy piosenkę do słownika według tagu
-        tag = song_data["tag"]
-        if tag not in tags:
-            tags[tag] = []
-        tags[tag].append(song_data)
+        # Połącz akordy z tekstami
+        song_data["chords_and_lyrics"] = list(zip(chords_list, lyrics_list))
 
         # Renderowanie HTML dla piosenki
         related_songs = []  # Inicjalizacja listy powiązanych piosenek
@@ -78,20 +78,20 @@ for filename in os.listdir(SONGS_DIR):
             # Dodajemy piosenki z innych tagów, ale z tym samym tagiem
             related_songs.extend([s for s in t if s["title"] != song_data["title"]])  
         related_songs = related_songs[:3]  # Maksymalnie 3 powiązane piosenki
-        
+             
         # Renderowanie strony piosenki
         rendered_html = song_template.render(song=song_data, related_songs=related_songs, song_links=song_links)
 
         output_filename = song_data["title"].replace(" ", "-").replace(",", "").replace(":", "").replace("ł", "l") + ".html"
         output_path = os.path.join(OUTPUT_DIR, output_filename)
-        
+        print(song_data)
         try:
             with open(output_path, "w", encoding="utf-8") as output_file:
                 output_file.write(rendered_html)
             print(f"Wygenerowano: {output_path}")
         except Exception as e:
             print(f"Błąd podczas zapisywania pliku {output_path}: {e}")
-        
+
         # Dodaj link do tej piosenki na stronę główną
         song_links.append({
             "title": song_data["title"],
