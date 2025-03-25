@@ -16,6 +16,8 @@ body {
     margin-bottom: 20px;
     color: white;
     text-align: center;
+    border-radius: 0px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .header-container h1 {
@@ -81,17 +83,17 @@ input[type="checkbox"] {
     background: white;
     margin: 20px auto;
     padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: left;
 }
 
 .song-line {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     transition: transform 0.3s ease, background-color 0.3s;
-    padding: 10px;
+    padding: 12px;
     border-bottom: 1px solid #97D8C4;
 }
 
@@ -237,8 +239,8 @@ input[type="checkbox"] {
 
 .song-metadata {
     text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 25px;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
     border-bottom: 2px solid #97D8C4;
 }
 
@@ -294,40 +296,36 @@ input[type="checkbox"] {
 
 .search-container {
     position: relative;
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 0 20px;
+    width: 100%;
 }
 
-.search-results {
+#searchResults {
+    display: none;
     position: absolute;
     top: 100%;
-    left: 20px;
-    right: 20px;
-    background: white;
-    border: 1px solid #97D8C4;
-    border-radius: 8px;
-    margin-top: 5px;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
     max-height: 300px;
     overflow-y: auto;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+    background-color: white;
+    z-index: 10;
 }
 
-.search-results.active {
-    display: block;
+#searchResults ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
-.search-result-item {
-    padding: 10px 15px;
+#searchResults li {
+    padding: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #ccc;
 }
 
-.search-result-item:hover {
-    background-color: #EFF2F1;
-    color: #FF9F1C;
+#searchResults li:hover {
+    background-color: #f0f0f0;
 }
 
 .song-list {
@@ -372,7 +370,7 @@ input[type="checkbox"] {
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     margin-bottom: 20px;
     font-size: 16px;
@@ -488,7 +486,7 @@ input[type="checkbox"] {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .song {
@@ -561,23 +559,6 @@ label[for="toggleFormat"] {
 
 #iframeContainer {
     margin-top: 20px;
-}
-
-#searchResults {
-    margin-top: 10px;
-    text-align: left;
-    display: none;
-}
-
-#searchResults.active {
-    display: block;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    max-width: 300px;
-    margin: 0 auto;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Nowe style dla checkboxa i akordów */

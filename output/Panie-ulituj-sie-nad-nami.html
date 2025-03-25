@@ -17,12 +17,41 @@
         </nav>
     </div>
 
+    <!-- Searchbar -->
     <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Szukaj piosenki...">
+        <input type="text" id="searchInput" placeholder="Szukaj piosenki..." oninput="searchSongs()" onclick="toggleSearchResults(true)">
         <div id="searchResults" class="search-results"></div>
     </div>
-    
-    <div id="songList" class="song-list"></div> <!-- Lista piosenek -->
+
+    <div id="songList" class="song-list">
+        <ul id="song-list" style="display: none;">
+            
+                <li data-normalized="boze pomoz nam przetrwac">
+                    <a href="../output/Boże-pomóż-nam-przetrwać.html" class="song-title">
+                        Boże pomóż nam przetrwać
+                    </a>
+                </li>
+            
+                <li data-normalized="panie prosimy o pokoj">
+                    <a href="../output/Panie-prosimy-o-pokój.html" class="song-title">
+                        Panie prosimy o pokój
+                    </a>
+                </li>
+            
+                <li data-normalized="panie ratuj nas w trudzie">
+                    <a href="../output/Panie-ratuj-nas-w-trudzie.html" class="song-title">
+                        Panie ratuj nas w trudzie
+                    </a>
+                </li>
+            
+                <li data-normalized="panie-ulituj-sie-nad-nami">
+                    <a href="../output/Panie-ulituj-sie-nad-nami.html" class="song-title">
+                        Panie-ulituj-sie-nad-nami
+                    </a>
+                </li>
+            
+        </ul>
+    </div>
 
     <label for="toggleFormat">
         <input type="checkbox" id="toggleFormat">
@@ -35,7 +64,6 @@
         <p><strong>Tagi:</strong> O-Bogu,Chwalebna</p>
         <p><strong>Intro:</strong> CeFA</p>
 
-        
         <div class="song-lyrics">
             
                 <div class="song-line">
@@ -80,60 +108,129 @@
             
         </div>
 
-        <!-- Sekcja związana z YouTube -->
+        <!-- Sekcja YouTube -->
         <div id="video-thumbnail-container"></div>
         <div id="iframeContainer" style="display: none;"></div>
 
         <script>
-            const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Use the song's link if available
+             const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Use the song's link if available
         
-            window.onload = () => {
-                const videoId = extractVideoId(youtubeLink);
-                
-                if (videoId) {
-                    const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
-                    document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
-                } else {
-                    alert('Nieprawidłowy link do YouTube');
+        window.onload = () => {
+            const videoId = extractVideoId(youtubeLink);
+            
+            if (videoId) {
+                const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
+                document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
+            } else {
+                alert('Nieprawidłowy link do YouTube');
+            }
+        };
+    
+        function extractVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+    
+        function loadVideo(videoId) {
+            document.getElementById('video-thumbnail-container').style.display = 'none';
+            const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+            document.getElementById('iframeContainer').innerHTML = iframe;
+            document.getElementById('iframeContainer').style.display = 'block';
+        }
+            // Funkcja usuwająca diakrytyki
+            function removeDiacritics(str) {
+                const diacritics = [
+                    { base: 'a', letters: /[áàäâã]/g },
+                    { base: 'e', letters: /[éèêë]/g },
+                    { base: 'i', letters: /[íìîï]/g },
+                    { base: 'o', letters: /[óòôö]/g },
+                    { base: 'u', letters: /[úùûü]/g },
+                    { base: 'c', letters: /[ćč]/g },
+                    { base: 'n', letters: /[ń]/g },
+                    { base: 's', letters: /[śš]/g },
+                    { base: 'z', letters: /[źż]/g }
+                ];
+                for (let i = 0; i < diacritics.length; i++) {
+                    str = str.replace(diacritics[i].letters, diacritics[i].base);
                 }
-            };
-        
-            function extractVideoId(url) {
-                const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-                const match = url.match(regex);
-                return match ? match[1] : null;
-            }
-        
-            function loadVideo(videoId) {
-                document.getElementById('video-thumbnail-container').style.display = 'none';
-                const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-                document.getElementById('iframeContainer').innerHTML = iframe;
-                document.getElementById('iframeContainer').style.display = 'block';
+                return str;
             }
 
-            // Funkcja do przełączania formatu
-            function initFormatToggle() {
-                const toggleCheckbox = document.getElementById("toggleFormat");
-                toggleCheckbox.addEventListener("change", function() {
-                    const songLines = document.querySelectorAll(".song-line");
-                    songLines.forEach(line => {
-                        if (this.checked) {
-                            line.classList.remove("horizontal");
-                            line.classList.add("vertical");
-                        } else {
-                            line.classList.remove("vertical");
-                            line.classList.add("horizontal");
-                        }
-                    });
+            // Przy ładowaniu strony prekompilujemy przetworzone tytuły
+            document.addEventListener("DOMContentLoaded", function(){
+                const items = document.querySelectorAll("#song-list li");
+                items.forEach(item => {
+                    const link = item.querySelector(".song-title");
+                    if (link) {
+                        const normalized = removeDiacritics(link.textContent.toLowerCase());
+                        item.dataset.normalized = normalized;
+                    }
                 });
+            });
+
+            // Funkcja wyszukiwania
+            function searchSongs() {
+                const input = document.getElementById("searchInput");
+                const filter = removeDiacritics(input.value.trim().toLowerCase());
+                const items = document.querySelectorAll("#song-list li");
+                const searchResultsContainer = document.getElementById("searchResults");
+
+                // Czyścimy kontener wyników
+                searchResultsContainer.innerHTML = '';
+
+                // Jeśli filtr jest pusty, pokaż wszystkie elementy i wyjdź
+                if (filter === "") {
+                    searchResultsContainer.style.display = 'none';
+                    return;
+                }
+
+                const results = [];
+                items.forEach(item => {
+                    const normalizedTitle = item.dataset.normalized || "";
+                    if (normalizedTitle.includes(filter)) {
+                        item.style.display = '';
+                        results.push(item);
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Wyświetlamy wyniki w dedykowanym kontenerze
+                if (results.length > 0) {
+                    searchResultsContainer.style.display = 'block';
+                    const resultList = document.createElement("ul");
+                    results.forEach(item => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = item.querySelector(".song-title").textContent;
+                        listItem.onclick = function () {
+                            window.location.href = item.querySelector(".song-title").href;  // Przechodzimy do strony piosenki
+                        };
+                        resultList.appendChild(listItem);
+                    });
+                    searchResultsContainer.appendChild(resultList);
+                } else {
+                    searchResultsContainer.textContent = "Brak wyników wyszukiwania.";
+                    searchResultsContainer.style.display = 'block';
+                }
             }
 
-            document.addEventListener('DOMContentLoaded', function() {
-                initFormatToggle();
+            // Funkcja do ukrywania wyników po kliknięciu poza polem wyszukiwania
+            function toggleSearchResults(isVisible) {
+                const searchResultsContainer = document.getElementById("searchResults");
+                searchResultsContainer.style.display = isVisible ? 'block' : 'none';
+            }
+
+            // Zamykanie wyników wyszukiwania po kliknięciu poza polem
+            document.addEventListener('click', function(event) {
+                const searchInput = document.getElementById("searchInput");
+                const searchResultsContainer = document.getElementById("searchResults");
+                if (!searchInput.contains(event.target) && !searchResultsContainer.contains(event.target)) {
+                    searchResultsContainer.style.display = 'none';
+                }
             });
         </script>
 
-        <!-- Lista piosenek o tym samym tagu -->
         <h3>Inne piosenki z tego samego tagu:</h3>
         <ul id="related-songs-list">
             
