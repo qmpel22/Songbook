@@ -188,9 +188,9 @@ input[type="checkbox"] {
     align-items: center;
     margin: 20px auto;
     padding: 20px;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(64, 89, 173, 0.1);
+    background: #F8F9FA;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .transpose-container label {
@@ -231,10 +231,10 @@ input[type="checkbox"] {
 }
 
 .transpose-btn.active {
-    background: #FF9F1C;
+    background-color: #4CAF50;
     color: white;
-    border-color: #FF9F1C;
-    box-shadow: 0 2px 5px rgba(255, 159, 28, 0.3);
+    border-color: #4CAF50;
+    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
 }
 
 .song-metadata {

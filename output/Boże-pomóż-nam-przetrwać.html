@@ -113,36 +113,52 @@
             
         </div>
 
+        <div id="transpose-controls">
+            <button class="transpose-btn" data-value="-6">-6</button>
+            <button class="transpose-btn" data-value="-5">-5</button>
+            <button class="transpose-btn" data-value="-4">-4</button>
+            <button class="transpose-btn" data-value="-3">-3</button>
+            <button class="transpose-btn" data-value="-2">-2</button>
+            <button class="transpose-btn" data-value="-1">-1</button>
+            <button class="transpose-btn" data-value="0">0</button>
+            <button class="transpose-btn" data-value="1">+1</button>
+            <button class="transpose-btn" data-value="2">+2</button>
+            <button class="transpose-btn" data-value="3">+3</button>
+            <button class="transpose-btn" data-value="4">+4</button>
+            <button class="transpose-btn" data-value="5">+5</button>
+        </div>
+
         <!-- Sekcja YouTube -->
         <div id="video-thumbnail-container"></div>
         <div id="iframeContainer" style="display: none;"></div>
 
         <script>
-             const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Use the song's link if available
+            const youtubeLink = "https://www.youtube.com/watch?v=YZuFsI-bttM"; // Use the song's link if available
         
-        window.onload = () => {
-            const videoId = extractVideoId(youtubeLink);
-            
-            if (videoId) {
-                const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
-                document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
-            } else {
-                alert('Nieprawidłowy link do YouTube');
+            window.onload = () => {
+                const videoId = extractVideoId(youtubeLink);
+                
+                if (videoId) {
+                    const thumbnail = `<img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" alt="YouTube video thumbnail" width="560" height="315" id="video-thumbnail" onclick="loadVideo('${videoId}')">`;
+                    document.getElementById('video-thumbnail-container').innerHTML = thumbnail;
+                } else {
+                    alert('Nieprawidłowy link do YouTube');
+                }
+            };
+        
+            function extractVideoId(url) {
+                const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+                const match = url.match(regex);
+                return match ? match[1] : null;
             }
-        };
-    
-        function extractVideoId(url) {
-            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-            const match = url.match(regex);
-            return match ? match[1] : null;
-        }
-    
-        function loadVideo(videoId) {
-            document.getElementById('video-thumbnail-container').style.display = 'none';
-            const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
-            document.getElementById('iframeContainer').innerHTML = iframe;
-            document.getElementById('iframeContainer').style.display = 'block';
-        }
+        
+            function loadVideo(videoId) {
+                document.getElementById('video-thumbnail-container').style.display = 'none';
+                const iframe = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+                document.getElementById('iframeContainer').innerHTML = iframe;
+                document.getElementById('iframeContainer').style.display = 'block';
+            }
+
             // Funkcja usuwająca diakrytyki
             function removeDiacritics(str) {
                 const diacritics = [
@@ -234,13 +250,69 @@
                     searchResultsContainer.style.display = 'none';
                 }
             });
+
+            // Funkcja transponowania akordów
+            document.addEventListener('DOMContentLoaded', function() {
+    const transposeButtons = document.querySelectorAll('.transpose-btn');
+    let originalChords = []; // Tablica na oryginalne akordy
+    let currentTransposeValue = 0; // Zmienna kontrolująca stan transponowania (zaczyna od 0)
+
+    // Najpierw zapisz oryginalne akordy
+    const songLines = document.querySelectorAll('.song-line');
+    songLines.forEach(line => {
+        const chordsElement = line.querySelector('.chords');
+        if (chordsElement) {
+            originalChords.push(chordsElement.textContent.split(' ')); // Zapisz akordy do tablicy
+        }
+    });
+
+    transposeButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const transposeValue = parseInt(this.getAttribute('data-value'));
+
+            // Ustawienie przycisku jako aktywnego (podświetlonego)
+            transposeButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            // Sprawdzamy, czy nowa transpozycja jest różna od poprzedniej
+            if (transposeValue !== currentTransposeValue) {
+                currentTransposeValue = transposeValue; // Ustawiamy nową wartość transpozycji
+
+                // Transponowanie akordów na stronie
+                songLines.forEach((line, index) => {
+                    const chordsElement = line.querySelector('.chords');
+                    if (chordsElement) {
+                        let chords = originalChords[index]; // Pobierz oryginalne akordy
+                        chords = chords.map(chord => transposeChord(chord, currentTransposeValue)); // Transponuj akordy
+                        chordsElement.textContent = chords.join(' '); // Wyświetl transponowane akordy
+                    }
+                });
+            }
+        });
+    });
+
+    // Funkcja transponowania akordu
+    function transposeChord(note, semitones) {
+        const noteMap = {
+            'C': 0, 'C#': 1, 'D': 2, 'D#': 3, 'E': 4, 'F': 5, 'F#': 6, 'G': 7, 'G#': 8, 'A': 9, 'A#': 10, 'B': 11
+        };
+        const reverseNoteMap = Object.keys(noteMap);
+
+        const noteUpper = note.toUpperCase();
+        if (noteMap[noteUpper] !== undefined) {
+            const transposedIndex = (noteMap[noteUpper] + semitones + 12) % 12;
+            return reverseNoteMap[transposedIndex];
+        }
+        return note; // Return the original note if it's not found
+    }
+});
+
         </script>
 
-        <h3>Inne piosenki z tego samego tagu:</h3>
-        <ul id="related-songs-list">
+        <h3>Inne piosenki:</h3>
+        <ul>
             
         </ul>
     </div>
-
 </body>
 </html>

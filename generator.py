@@ -127,3 +127,4 @@ except Exception as e:
     print(f"Błąd podczas aktualizacji {INDEX_FILE}: {e}")
 
 print("Wszystkie strony i index zostały wygenerowane.")
+    
